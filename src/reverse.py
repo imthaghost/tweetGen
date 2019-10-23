@@ -1,4 +1,16 @@
 def reverse(Sentence):
+    """Returns a given word in reverse 
+
+        Parameters
+        ----------
+        Sentence : str,
+            Any given string
+
+        Raises
+        ------
+        TypeError
+            If no parameters passed
+        """
     # Spliting the Sentence into list of words.
     words = Sentence.split(" ")
     # List Comprehension Technique
@@ -8,12 +20,6 @@ def reverse(Sentence):
     newSentence = " ".join(newWords)
 
     return newSentence
-
-
-# Driver's Code
-Sentence = "I like cats"
-
-print(reverse(Sentence))
 
 
 def bad_reverse(string):

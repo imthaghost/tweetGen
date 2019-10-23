@@ -33,5 +33,5 @@ def rearrange(words):
 if __name__ == "__main__":
 
     args = argv[1:]
-    words = lit_rearrange(args)
+    words = rearrange(args)
     print(words)

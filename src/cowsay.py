@@ -18,10 +18,12 @@ art = """
 
 
 def cowsay(sentence):
-    return art.format(sentence)
+    word = ' '.join(sentence)
+
+    return art.format(word)
 
 
 if __name__ == "__main__":
-    args = argv
-    for x in args:
-        print(cowsay(x))
+    print(cowsay(argv[1:]))
+
+    # print(cowsay(sentence))

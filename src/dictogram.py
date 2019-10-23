@@ -12,6 +12,7 @@ class Dictogram(dict):
         # Add properties to track useful word counts for this histogram
         self.types = 0  # Count of distinct word types in this histogram
         self.tokens = 0  # Total count of all word tokens in this histogram
+        self.word_count = 0
         # Count words in given list, if any
         if word_list is not None:
             for word in word_list:
@@ -55,6 +56,17 @@ def main():
         woodchuck_text = ('how much wood would a wood chuck chuck'
                           ' if a wood chuck could chuck wood')
         print_histogram(woodchuck_text.split())
+
+
+# class histogram(list):
+#     def __init__(self):
+#         pass
+
+#     def add_count(self):
+#         pass
+
+#     def frequency(self):
+#         pass
 
 
 if __name__ == '__main__':
