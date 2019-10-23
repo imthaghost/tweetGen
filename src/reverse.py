@@ -14,3 +14,7 @@ def reverse(Sentence):
 Sentence = "I like cats"
 
 print(reverse(Sentence))
+
+
+def bad_reverse(string):
+    return string[::-1]

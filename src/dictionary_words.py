@@ -2,8 +2,7 @@ import os
 from sys import argv
 
 
-
-def dictionary(path):
+def dictionary(path, num):
     wordlist = open(path, 'r')
     words = []
     for word in wordlist:
