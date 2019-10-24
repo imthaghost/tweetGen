@@ -2,6 +2,7 @@ import requests
 from dictionary_words import time_it, get_word
 import os
 import json
+from random import choice
 
 
 @time_it
@@ -39,7 +40,6 @@ def game(key, wordlist='/usr/share/dict/words'):
         request_url = base.format(word)
         # create the request and dump the response
         response = requests.get(request_url).json()
-    print('okay heres one')
     print('\n')
     definition = response[0]['shortdef']
     print(definition[0])
@@ -51,10 +51,12 @@ def game(key, wordlist='/usr/share/dict/words'):
 
 def found(response):
     if isinstance(response[0], str):
-        print('not found')
+        thinking = ['nope', 'not that one', 'oo thats too hard for you',
+                    'hmmmm', 'thinking...', 'maybeee...']
+        print(choice(thinking))
         return False
     else:
-        print('found')
+        print('found one for you!')
         return True
 
 
