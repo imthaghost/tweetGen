@@ -57,7 +57,15 @@ def dictionary(path='/usr/share/dict/words', num=1):
             rand_word.append(choice(words))
         return ' '.join(rand_word).capitalize() + '.'
 
-#!################################## Generator ############################
+
+def get_word(path='/usr/share/dict/words'):
+    with open(path, "r") as yeet:
+        word = yeet.read().split('\n')
+        rand_word = choice(word)
+        return rand_word
+
+
+################################### Generator ############################
 
 
 @time_it
@@ -69,7 +77,7 @@ def anagram_gen(word):
             for i in range(len(word)):
                 yield perm[:i] + word[0:1] + perm[i:]
 
-#!################################## Generator ############################
+################################### Generator ############################
 
 
 @time_it
