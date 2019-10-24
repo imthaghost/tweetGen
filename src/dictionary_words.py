@@ -52,10 +52,11 @@ def dictionary(path='/usr/share/dict/words', num=1):
         """
     with open(path, "r") as yeet:
         words = yeet.read().split('\n')
-        rand_word = []
+        rand_word_or_words_are_we_really_here_for_naming_convention = []
         for i in range(int(num)):
-            rand_word.append(choice(words))
-        return ' '.join(rand_word).capitalize() + '.'
+            rand_word_or_words_are_we_really_here_for_naming_convention.append(
+                choice(words))
+        return ' '.join(rand_word_or_words_are_we_really_here_for_naming_convention).capitalize() + '.'
 
 
 def get_word(path='/usr/share/dict/words'):
