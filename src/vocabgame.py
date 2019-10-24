@@ -64,8 +64,6 @@ if __name__ == "__main__":
     # grab the api key
     api_key = os.environ.get('api_key')
     # play the game
-    some_word = game(api_key)
-    word_guess = input('>> ')
     while True:
         some_word = game(api_key)
         word_guess = input('>> ')
