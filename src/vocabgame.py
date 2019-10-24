@@ -20,8 +20,7 @@ def game(key, wordlist='/usr/share/dict/words'):
         TypeError
             If the randomly generated word is not found on dictionary.com
         """
-    print('ASSSUHHHH dude! Try guessing the definition')
-    print('\n')
+
     print('hmmmm let me think of a definition')
     # set the base uri
     base = 'https://dictionaryapi.com/api/v3/references/collegiate/json/{}?key=%s' % (
@@ -65,6 +64,8 @@ if __name__ == "__main__":
     api_key = os.environ.get('api_key')
     # play the game
     while True:
+        print('ASSSUHHHH dude! Welcome to the vocab game')
+        print('\n')
         some_word = game(api_key)
         word_guess = input('>> ')
         if some_word == word_guess:
