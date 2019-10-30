@@ -83,8 +83,3 @@ class histogram(dict):
 #         return histogram.get(word, 0)
 #     # if isinstance(histogram, list):
 #     #     return [x for x in histogram print(x)]
-
-
-# def add(word_list):
-
-#     histo = []
