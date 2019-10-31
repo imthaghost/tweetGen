@@ -1,9 +1,39 @@
 import os
 import random
+import time
 import re
 import sys
 from decimal import *
 from optparse import OptionParser
+
+
+def time_it(func):
+    """
+
+    """
+    def wrapper(*args, **kwargs):
+        """Returns random words from a file 
+
+        Parameters
+        ----------
+        path : str, OSX words list by default
+            The path of the words file
+
+        num : int, at least 1 word by default
+            The number of words we want to return
+
+        Raises
+        ------
+        TypeError
+            If no no or 1 parameter was given...requires two keyword parameters path and ammount
+        """
+        start = time.time()
+        result = func(*args, **kwargs)
+        end = time.time()
+        print(func.__name__ + " took " + str((end - start) * 1000) + " ms")
+        return result
+
+    return wrapper
 
 
 class VoseAlias(object):
@@ -70,6 +100,7 @@ class VoseAlias(object):
         else:
             return self.table_alias[col]
 
+    @time_it
     def sample_n(self, size):
         """ Return a sample of size n from the distribution."""
         # Ensure a non-negative integer as been specified
@@ -100,10 +131,12 @@ def get_words(file):
             raise IOError("Please provide a file containing text-based data.")
 
     with open(file, "r") as corpus:
-        words = corpus.read().split()
-    return words
+        words = corpus.read().lower()
+        words_list = re.sub(r'[^a-zA-Z\s]', '', words).split()
+    return words_list
 
 
+@time_it
 def sample2dist(sample):
     """ (list) -> dict (i.e {outcome:proportion})
     Construct a distribution based on an observed sample (e.g. rolls of a bias die) """
@@ -113,6 +146,7 @@ def sample2dist(sample):
     get = dist.get
     for o in sample:  # o for outcome
         dist[o] = get(o, 0) + increment
+
     return dist
 
 
@@ -128,36 +162,39 @@ def check_required_arguments(opts, parser):
         sys.exit(1)
 
 
-def handle_options():
-    parser = OptionParser()
-    parser.add_option("-p", "--path", dest="path",
-                      help="[REQUIRED] Path to corpus.", metavar="FILE")
-    parser.add_option("-n", "--num", dest="n", type=int,
-                      help="[REQUIRED] Non-negative integer specifying how many samples are desired.", metavar="INT")
+# def handle_options():
+#     parser = OptionParser()
+#     parser.add_option("-p", "--path", dest="path",
+#                       help="[REQUIRED] Path to corpus.", metavar="FILE")
+#     parser.add_option("-n", "--num", dest="n", type=int,
+#                       help="[REQUIRED] Non-negative integer specifying how many samples are desired.", metavar="INT")
 
-    (options, args) = parser.parse_args()
-    check_required_arguments(options, parser)
-    return options
+#     (options, args) = parser.parse_args()
+#     check_required_arguments(options, parser)
+#     return options
 
 
-def main():
-    # Handle command line arguments
-    options = handle_options()
+# def main():
+#     # Handle command line arguments
+#     # options = handle_options()
 
-    try:
-        # Construct distribution
-        words = get_words(options.path)
-        word_dist = sample2dist(words)
-        VA_words = VoseAlias(word_dist)
+#     try:
+#         # Construct distribution
+#         words = get_words(options.path)
+#         word_dist = sample2dist(words)
+#         VA_words = VoseAlias(word_dist)
 
-        # Sample n words
-        print("\nGenerating %d random samples:\n" % options.n)
-        sample = VA_words.sample_n(options.n)
-        for s in sample:
-            print(s)
-    except Exception as e:
-        sys.exit("\nError: %s" % e)
+#         # Sample n words
+#         print("\nGenerating %d random samples:\n" % options.n)
+#         sample = VA_words.sample_n(options.n)
+#         for s in sample:
+#             print(s)
+#     except Exception as e:
+#         sys.exit("\nError: %s" % e)
 
 
 if __name__ == "__main__":
-    main()
+    words = get_words('/usr/share/dict/words')
+    histogram = sample2dist(words)
+    VA = VoseAlias(histogram)
+    print(VA.sample_n(size=100))
