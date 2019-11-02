@@ -8,6 +8,13 @@ autopep8 = "*"
 
 [packages]
 flask = "*"
+beautifulsoup4 = "*"
+requests = "*"
+numpy = "*"
+pandas = "*"
+wordcloud = "*"
+matplotlib = "*"
+pillow = "*"
 
 [requires]
 python_version = "3.7"

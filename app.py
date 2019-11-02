@@ -26,7 +26,6 @@ def generate():
         return jsonify({'sentence': sentence})
     else:
         yeet = vose.sample_n(size=num)
-        # "I don't want to do this logic shit, ben just do it for me" - Gary
         sentence = ' '.join(yeet).capitalize() + '.'
         return jsonify({'sentence': sentence})
 
