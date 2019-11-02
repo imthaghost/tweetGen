@@ -196,10 +196,10 @@ class Dictogram(dict):
 #     print()
 
 
-def main():
-    histogram = Dictogram('/usr/share/dict/words')
-    print(histogram.sample_it())
+# def main():
+#     histogram = Dictogram('/usr/share/dict/words')
+#     print(histogram.sample_it())
 
 
-if __name__ == '__main__':
-    main()
+# if __name__ == '__main__':
+#     main()
