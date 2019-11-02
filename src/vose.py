@@ -149,31 +149,6 @@ def sample2dist(sample):
 
     return dist
 
-
-# COMMAND LINE HANDLING
-def check_required_arguments(opts, parser):
-    missing_options = []
-    for option in parser.option_list:
-        if re.match(r'^\[REQUIRED\]', option.help) and eval('opts.' + option.dest) is None:
-            missing_options.extend(option._long_opts)
-    if len(missing_options) > 0:
-        parser.error('Missing REQUIRED parameters: ' + str(missing_options))
-        parser.print_help()
-        sys.exit(1)
-
-
-# def handle_options():
-#     parser = OptionParser()
-#     parser.add_option("-p", "--path", dest="path",
-#                       help="[REQUIRED] Path to corpus.", metavar="FILE")
-#     parser.add_option("-n", "--num", dest="n", type=int,
-#                       help="[REQUIRED] Non-negative integer specifying how many samples are desired.", metavar="INT")
-
-#     (options, args) = parser.parse_args()
-#     check_required_arguments(options, parser)
-#     return options
-
-
 # def main():
 #     # Handle command line arguments
 #     # options = handle_options()
@@ -193,8 +168,8 @@ def check_required_arguments(opts, parser):
 #         sys.exit("\nError: %s" % e)
 
 
-if __name__ == "__main__":
-    words = get_words('/usr/share/dict/words')
-    histogram = sample2dist(words)
-    VA = VoseAlias(histogram)
-    print(VA.sample_n(size=100))
+# if __name__ == "__main__":
+#     words = get_words('/usr/share/dict/words')
+#     histogram = sample2dist(words)
+#     VA = VoseAlias(histogram)
+#     print(VA.sample_n(size=100))
