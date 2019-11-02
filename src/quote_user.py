@@ -6,6 +6,19 @@ quotes = ("It's just a flesh wound.",
 
 
 def random_python_quote():
+    """Given a definition try matching a word to the definition :) 
+
+        Parameters
+        ----------
+        key : str
+            Your dictionary.com api key
+        wordlist : str
+            Path to any wordlist you want by default it uses the OSX built in word list
+        Raises
+        ------
+        TypeError
+            If the randomly generated word is not found on dictionary.com
+    """
     return choice(quotes)
 
 

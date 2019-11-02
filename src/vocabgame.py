@@ -49,6 +49,19 @@ def game(key, wordlist='/usr/share/dict/words'):
 
 
 def found(response):
+    """Given a definition try matching a word to the definition :) 
+
+        Parameters
+        ----------
+        key : str
+            Your dictionary.com api key
+        wordlist : str
+            Path to any wordlist you want by default it uses the OSX built in word list
+        Raises
+        ------
+        TypeError
+            If the randomly generated word is not found on dictionary.com
+    """
     if isinstance(response[0], str):
         thinking = ['nope', 'not that one', 'oo thats too hard for you',
                     'hmmmm', 'thinking...', 'maybeee...']

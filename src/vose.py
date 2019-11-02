@@ -14,13 +14,37 @@ class VoseAlias(object):
     """
 
     def __init__(self, dist):
-        """ (VoseAlias, dict) -> NoneType """
+        """Given a definition try matching a word to the definition :)
+
+        Parameters
+        ----------
+        key : str
+            Your dictionary.com api key
+        wordlist : str
+            Path to any wordlist you want by default it uses the OSX built in word list
+        Raises
+        ------
+        TypeError
+            If the randomly generated word is not found on dictionary.com
+        """
         self.dist = dist
         self.alias_initialisation()
         self.table_prob_list = list(self.table_prob)
 
     def alias_initialisation(self):
-        """ Construct probability and alias tables for the distribution. """
+        """Given a definition try matching a word to the definition :) 
+
+        Parameters
+        ----------
+        key : str
+            Your dictionary.com api key
+        wordlist : str
+            Path to any wordlist you want by default it uses the OSX built in word list
+        Raises
+        ------
+        TypeError
+            If the randomly generated word is not found on dictionary.com
+        """
         # Initialise variables
         n = len(self.dist)
         self.table_prob = {}   # probability table
@@ -61,7 +85,19 @@ class VoseAlias(object):
             self.table_prob[small.pop()] = Decimal(1)
 
     def alias_generation(self):
-        """ Return a random outcome from the distribution. """
+        """Given a definition try matching a word to the definition :) 
+
+        Parameters
+        ----------
+        key : str
+            Your dictionary.com api key
+        wordlist : str
+            Path to any wordlist you want by default it uses the OSX built in word list
+        Raises
+        ------
+        TypeError
+            If the randomly generated word is not found on dictionary.com
+        """
         # Determine which column of table_prob to inspect
         col = random.choice(self.table_prob_list)
 
@@ -72,7 +108,19 @@ class VoseAlias(object):
             return self.table_alias[col]
 
     def sample_n(self, size):
-        """ Return a sample of size n from the distribution."""
+        """Given a definition try matching a word to the definition :) 
+
+        Parameters
+        ----------
+        key : str
+            Your dictionary.com api key
+        wordlist : str
+            Path to any wordlist you want by default it uses the OSX built in word list
+        Raises
+        ------
+        TypeError
+            If the randomly generated word is not found on dictionary.com
+        """
         # Ensure a non-negative integer as been specified
         n = int(size)
         if n <= 0:
@@ -84,8 +132,19 @@ class VoseAlias(object):
 
 # HELPER FUNCTIONS
 def get_words(file):
-    """ (str) -> list
-    Return a list of words from a given corpus. """
+    """Given a definition try matching a word to the definition :) 
+
+        Parameters
+        ----------
+        key : str
+            Your dictionary.com api key
+        wordlist : str
+            Path to any wordlist you want by default it uses the OSX built in word list
+        Raises
+        ------
+        TypeError
+            If the randomly generated word is not found on dictionary.com
+    """
 
     # Ensure the file is not empty
     if os.stat(file).st_size == 0:
@@ -94,11 +153,11 @@ def get_words(file):
 
     # Ensure the file is text based (not binary).
     # This is based on the implementation of the Linux file command
-    # textchars = bytearray([7, 8, 9, 10, 12, 13, 27]) + \
-    #     bytearray(range(0x20, 0x100))
-    # with open(file, "rb") as bin_file:
-    #     if bool(bin_file.read(2048).translate(None, textchars)):
-    #         raise IOError("Please provide a file containing text-based data.")
+    textchars = bytearray([7, 8, 9, 10, 12, 13, 27]) + \
+        bytearray(range(0x20, 0x100))
+    with open(file, "rb") as bin_file:
+        if bool(bin_file.read(2048).translate(None, textchars)):
+            raise IOError("Please provide a file containing text-based data.")
 
     with open(file, "r") as corpus:
         words = corpus.read().lower()
@@ -107,8 +166,19 @@ def get_words(file):
 
 
 def sample2dist(sample):
-    """ (list) -> dict (i.e {outcome:proportion})
-    Construct a distribution based on an observed sample (e.g. rolls of a bias die) """
+    """Given a definition try matching a word to the definition :) 
+
+        Parameters
+        ----------
+        key : str
+            Your dictionary.com api key
+        wordlist : str
+            Path to any wordlist you want by default it uses the OSX built in word list
+        Raises
+        ------
+        TypeError
+            If the randomly generated word is not found on dictionary.com
+    """
     increment = Decimal(1)/len(sample)
     print('generating histogram')
     dist = {}
