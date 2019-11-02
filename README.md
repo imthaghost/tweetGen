@@ -1,4 +1,4 @@
 Tweet generator
 
 
-<img src="/static/imgs/homepage.png" width="55%"></img>
+<img src="/static/img/gen.png" width="55%"></img>
