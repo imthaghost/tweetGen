@@ -1,15 +1,19 @@
 #!python
 import os
 import re  # regular expression library
+import time
 import logging
 from decimal import *
+from wrapper import time_it
+from threading import Threads
+from multiprocessing import Process
 from random import random, choice, uniform
 
 
 class Dictogram(dict):
     """Dictogram is a histogram implemented as a subclass of the dict type."""
-
-    def __init__(self, wordlist, path=None):
+    @time_it
+    def __init__(self, wordlist=None, path=None):
         """ Initialize this histogram as a new dict and count given words.
             returns a histogram data structure that stores each unique word along with
             the number of times that the word appears in the source text
@@ -35,7 +39,7 @@ class Dictogram(dict):
             for word in some_words:
                 if word:
                     self[word] = self.get(word, 0) + 1
-        else:
+        if wordlist is not None:
             for word in wordlist:
                 if word:
                     self[word] = self.get(word, 0) + 1
@@ -71,6 +75,7 @@ class Dictogram(dict):
         self[word] = self.get(word, 0) + count
         self.types = len(self)
 
+    @time_it
     def get_words(self, file):
         """ file byte stream -> list
         Return a list of words from a file. """
@@ -91,10 +96,52 @@ class Dictogram(dict):
             words_list = re.sub(r'[^a-zA-Z\s]', '', words).split()
         return words_list
 
+    @time_it
+    def sample(self, num):
+        v = VoseAlias(self)
+        return v.sample_n(num)
+
+
+class VoseAlias(object):
+    """ A probability distribution for discrete weighted random variables and its probability/alias
+    tables for efficient sampling via Vose's Alias Method (a good explanation of which can be found at
+    http://www.keithschwarz.com/darts-dice-coins/).
+    """
+
+    def __init__(self, dist):
+        """Given a definition try matching a word to the definition :)
+
+        Parameters
+        ----------
+        key : str
+            Your dictionary.com api key
+        wordlist : str
+            Path to any wordlist you want by default it uses the OSX built in word list
+        Raises
+        ------
+        TypeError
+            If the randomly generated word is not found on dictionary.com
+        """
+        self.dist = dist
+        self.alias_initialisation()
+        self.table_prob_list = list(self.table_prob)
+
     def alias_initialisation(self):
-        """ Construct probability and alias tables for the distribution. """
+        """Given a definition try matching a word to the definition :)
+
+        Parameters
+        ----------
+        key : str
+            Your dictionary.com api key
+        wordlist : str
+            Path to any wordlist you want by default it uses the OSX built in word list
+        Raises
+        ------
+        TypeError
+            If the randomly generated word is not found on dictionary.com
+        """
         # Initialise variables
-        n = len(self)
+        n = len(self.dist)
         self.table_prob = {}   # probability table
         self.table_alias = {}  # alias table
         scaled_prob = {}       # scaled probabilities
@@ -102,7 +149,7 @@ class Dictogram(dict):
         large = []             # stack for probabilities greater than or equal to 1
 
         # Construct and sort the scaled probabilities into their appropriate stacks
-        for o, p in self.items():
+        for o, p in self.dist.items():
             scaled_prob[o] = Decimal(p) * n
 
             if scaled_prob[o] < 1:
@@ -133,7 +180,19 @@ class Dictogram(dict):
             self.table_prob[small.pop()] = Decimal(1)
 
     def alias_generation(self):
-        """ Return a random outcome from the distribution. """
+        """Given a definition try matching a word to the definition :)
+
+        Parameters
+        ----------
+        key : str
+            Your dictionary.com api key
+        wordlist : str
+            Path to any wordlist you want by default it uses the OSX built in word list
+        Raises
+        ------
+        TypeError
+            If the randomly generated word is not found on dictionary.com
+        """
         # Determine which column of table_prob to inspect
         col = choice(self.table_prob_list)
 
@@ -143,8 +202,21 @@ class Dictogram(dict):
         else:
             return self.table_alias[col]
 
+    @time_it
     def sample_n(self, size):
-        """ Return a sample of size n from the distribution."""
+        """Given a definition try matching a word to the definition :)
+
+        Parameters
+        ----------
+        key : str
+            Your dictionary.com api key
+        wordlist : str
+            Path to any wordlist you want by default it uses the OSX built in word list
+        Raises
+        ------
+        TypeError
+            If the randomly generated word is not found on dictionary.com
+        """
         # Ensure a non-negative integer as been specified
         n = int(size)
         if n <= 0:
@@ -152,17 +224,6 @@ class Dictogram(dict):
                 "Please enter a non-negative integer for the number of samples desired: %d" % n)
 
         return [self.alias_generation() for i in range(n)]
-
-    def sample2dist(self, sample):
-        """ (list) -> dict (i.e {outcome:proportion})
-        Construct a distribution based on an observed sample (e.g. rolls of a bias die) """
-        increment = Decimal(1)/len(sample)
-
-        dist = {}
-        get = dist.get
-        for o in sample:  # o for outcome
-            dist[o] = get(o, 0) + increment
-        return dist
 
 
 def print_histogram(word_list):
@@ -176,11 +237,48 @@ def print_histogram(word_list):
         print('{!r} occurs {} times'.format(word, freq))
 
 
+def print_histogram_samples(histogram):
+    print('Histogram samples:')
+    # Sample the histogram 10,000 times and count frequency of results
+    samples_list = [histogram.sample() for _ in range(10000)]
+    samples_hist = Dictogram(samples_list)
+    print('samples: {}'.format(samples_hist))
+    print()
+    print('Sampled frequency and error from observed frequency:')
+    header = '| word type | observed freq | sampled freq  |  error  |'
+    divider = '-' * len(header)
+    print(divider)
+    print(header)
+    print(divider)
+    # Colors for error
+    green = '\033[32m'
+    yellow = '\033[33m'
+    red = '\033[31m'
+    reset = '\033[m'
+    # Check each word in original histogram
+    for word, count in histogram.items():
+        # Calculate word's observed frequency
+        observed_freq = count / histogram.tokens
+        # Calculate word's sampled frequency
+        samples = samples_hist.frequency(word)
+        sampled_freq = samples / samples_hist.tokens
+        # Calculate error between word's sampled and observed frequency
+        error = (sampled_freq - observed_freq) / observed_freq
+        color = green if abs(error) < 0.05 else yellow if abs(
+            error) < 0.1 else red
+        print('| {!r:<9} '.format(word)
+              + '| {:>4} = {:>6.2%} '.format(count, observed_freq)
+              + '| {:>4} = {:>6.2%} '.format(samples, sampled_freq)
+              + '| {}{:>+7.2%}{} |'.format(color, error, reset))
+    print(divider)
+    print()
+
+
 def main():
-    fish_words = ['one', 'fish', 'two', 'fish', 'red', 'fish', 'blue', 'fish']
-    histogram = Dictogram(fish_words)
-    print(histogram)
-    print(type(dict(histogram)))
+    # fish_words = ['one', 'fish', 'two', 'fish', 'red', 'fish', 'blue', 'fish']
+    histogram = Dictogram(path='thus.txt')
+    # print(type(dict(histogram)))
+    print(histogram.sample(10))
 
 
 if __name__ == '__main__':
