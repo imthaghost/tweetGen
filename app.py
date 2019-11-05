@@ -10,7 +10,9 @@ import pandas as pd
 from os import path
 from PIL import Image
 from src.vose import *
+from threading import Thread
 import matplotlib.pyplot as plt
+from multiprocessing import Process, Manager, Pool
 from wordcloud import WordCloud, STOPWORDS, ImageColorGenerator
 from flask import Flask, render_template, redirect, url_for, request, jsonify
 
@@ -22,14 +24,31 @@ words = get_words('./corpus/thus.txt')
 histogram = sample2dist(words)
 # construct alias tables
 vose = VoseAlias(histogram)
+
+
+def generation(corpus):
+    # genration function for master historgram
+    master = {}
+    print('generating master histogram')
+    for o in corpus:  # o for outcome
+        master[o] = master.get(o, 0) + 1
+    return master
+
+
+def generation_pid(corpus, histogram=None):
+    # genration function for master historgram
+    master = {}
+    print('generating master histogram')
+    for o in corpus:  # o for outcome
+        master[o] = master.get(o, 0) + 1
+    histogram = master
+    return histogram
 # master histogram
-master = {}
-for o in words:  # o for outcome
-    master[o] = master.get(o, 0) + 1
+# master = generation("./corpus/thus.txt")
 
 
 def transform_format(val):
-    # helper function
+    # helper function for transforming image colors
     if val == 0:
         return 255
     else:
@@ -50,8 +69,11 @@ def index():
             404:
                 description: index not found.
     """
-    global master  # user the master histogram not the alias table
-    # this will be the outline of our wordcloud
+    # master histogram
+    # generate a courpus
+    master = generation(
+        "./corpus/thus.txt")  # user the master histogram not the alias table
+    # this will be the outline of our wordlcoud image
     outline = np.array(Image.open("./static/img/bird.png"))
     # convert image rgb bytes to an array
     transformed = np.ndarray(
@@ -88,31 +110,41 @@ def index():
     return render_template('index.html')
 
 
-@app.route('/generate', methods=['POST'])
-def generate():
-    """ generate 
+# @app.route('/generate', methods=['POST'])
+# def generate():
+#     """ generate
 
-    @POST:
-        summary:
-        description:
-        responses:
-            200:
-                description:
-            400:
-                description:
-    """
-    num = request.form.get('count')
-    if num == None or num == 0:
-        yeet = vose.sample_n(size=10)
-        sentence = ' '.join(yeet).capitalize() + '.'
-        print('sentence:' + sentence)
-        return jsonify({'sentence': sentence})
-    else:
-        sample = vose.sample_n(size=num)
-        sentence = ' '.join(sample).capitalize() + '.'
-        return jsonify({'sentence': sentence})
+#     @POST:
+#         summary:
+#         description:
+#         responses:
+#             200:
+#                 description:
+#             400:
+#                 description:
+#     """
+#     num = request.form.get('count')
+#     if num == None or num == 0:
+#         yeet = vose.sample_n(size=10)
+#         sentence = ' '.join(yeet).capitalize() + '.'
+#         print('sentence:' + sentence)
+#         return jsonify({'sentence': sentence})
+#     else:
+#         sample = vose.sample_n(size=num)
+#         sentence = ' '.join(sample).capitalize() + '.'
+#         return jsonify({'sentence': sentence})
 
 
 if __name__ == "__main__":
+    path = './corpus/thus.txt'
+    # vals = []
+    # generation_kwargs = {'histogram': vals}
+    # pid1 = Process(target=generation_pid, args=(
+    #     get_words(path),), kwargs=generation_kwargs)
+    # pid1.start()
+    # print(pid1.pid)
+    # print(pid1)
+    # pid1.join()
+    # print(vals)
     os.environ['FLASK_ENV'] = 'development'  # set enviornment variable
     app.run(debug=True, port=8080)  # start the flask application
