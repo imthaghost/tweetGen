@@ -136,15 +136,5 @@ def index():
 
 
 if __name__ == "__main__":
-    path = './corpus/thus.txt'
-    # vals = []
-    # generation_kwargs = {'histogram': vals}
-    # pid1 = Process(target=generation_pid, args=(
-    #     get_words(path),), kwargs=generation_kwargs)
-    # pid1.start()
-    # print(pid1.pid)
-    # print(pid1)
-    # pid1.join()
-    # print(vals)
     os.environ['FLASK_ENV'] = 'development'  # set enviornment variable
     app.run(debug=True, port=8080)  # start the flask application
