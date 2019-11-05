@@ -3,7 +3,6 @@ import os
 import re  # regular expression library
 import logging
 from decimal import *
-from vose import VoseAlias, sample2dist
 from random import random, choice, uniform
 
 
@@ -46,32 +45,6 @@ class Dictogram(dict):
         # Count of distinct word types in this histogram
         self.types = len(self)
         self.tokens = sum(self.values())
-        self.word_count = 0  # word count
-
-    def add_count(self, key):
-        if key not in self.keys():
-            return 0
-        else:
-
-    def get_words(self, file):
-        """ file byte stream -> list
-        Return a list of words from a file. """
-        # Ensure the file is not empty
-        if os.stat(file).st_size == 0:
-            raise IOError(
-                "Please provide a file containing a corpus (not an empty file).")
-        # Ensure the file is text based (not binary). This is based on the implementation
-        #  of the Linux file command
-        textchars = bytearray([7, 8, 9, 10, 12, 13, 27]) + \
-            bytearray(range(0x20, 0x100))
-        with open(file, "rb") as bin_file:
-            if bool(bin_file.read(2048).translate(None, textchars)):
-                raise IOError(
-                    "Please provide a file containing text-based data.")
-        with open(file, "r") as corpus:
-            words = corpus.read().lower()
-            words_list = re.sub(r'[^a-zA-Z\s]', '', words).split()
-        return words_list
 
     def frequency(self, word):
         """returns the frequency in which a word is seen
@@ -93,80 +66,103 @@ class Dictogram(dict):
     def __contains__(self, target):
         return True if target in self.keys() else False
 
-    # def alias_initialisation(self):
-    #     """ Construct probability and alias tables for the distribution. """
-    #     # Initialise variables
-    #     n = len(self)
-    #     self.table_prob = {}   # probability table
-    #     self.table_alias = {}  # alias table
-    #     scaled_prob = {}       # scaled probabilities
-    #     small = []             # stack for probabilities smaller that 1
-    #     large = []             # stack for probabilities greater than or equal to 1
+    def add_count(self, word, count=1):
+        self.tokens += count
+        self[word] = self.get(word, 0) + count
+        self.types = len(self)
 
-    #     # Construct and sort the scaled probabilities into their appropriate stacks
-    #     for o, p in self.items():
-    #         scaled_prob[o] = Decimal(p) * n
+    def get_words(self, file):
+        """ file byte stream -> list
+        Return a list of words from a file. """
+        # Ensure the file is not empty
+        if os.stat(file).st_size == 0:
+            raise IOError(
+                "Please provide a file containing a corpus (not an empty file).")
+        # Ensure the file is text based (not binary). This is based on the implementation
+        #  of the Linux file command
+        textchars = bytearray([7, 8, 9, 10, 12, 13, 27]) + \
+            bytearray(range(0x20, 0x100))
+        with open(file, "rb") as bin_file:
+            if bool(bin_file.read(2048).translate(None, textchars)):
+                raise IOError(
+                    "Please provide a file containing text-based data.")
+        with open(file, "r") as corpus:
+            words = corpus.read().lower()
+            words_list = re.sub(r'[^a-zA-Z\s]', '', words).split()
+        return words_list
 
-    #         if scaled_prob[o] < 1:
-    #             small.append(o)
-    #         else:
-    #             large.append(o)
+    def alias_initialisation(self):
+        """ Construct probability and alias tables for the distribution. """
+        # Initialise variables
+        n = len(self)
+        self.table_prob = {}   # probability table
+        self.table_alias = {}  # alias table
+        scaled_prob = {}       # scaled probabilities
+        small = []             # stack for probabilities smaller that 1
+        large = []             # stack for probabilities greater than or equal to 1
 
-    #     # Construct the probability and alias tables
-    #     while small and large:
-    #         s = small.pop()
-    #         l = large.pop()
+        # Construct and sort the scaled probabilities into their appropriate stacks
+        for o, p in self.items():
+            scaled_prob[o] = Decimal(p) * n
 
-    #         self.table_prob[s] = scaled_prob[s]
-    #         self.table_alias[s] = l
+            if scaled_prob[o] < 1:
+                small.append(o)
+            else:
+                large.append(o)
 
-    #         scaled_prob[l] = (scaled_prob[l] + scaled_prob[s]) - Decimal(1)
+        # Construct the probability and alias tables
+        while small and large:
+            s = small.pop()
+            l = large.pop()
 
-    #         if scaled_prob[l] < 1:
-    #             small.append(l)
-    #         else:
-    #             large.append(l)
+            self.table_prob[s] = scaled_prob[s]
+            self.table_alias[s] = l
 
-    #     # The remaining outcomes (of one stack) must have probability 1
-    #     while large:
-    #         self.table_prob[large.pop()] = Decimal(1)
+            scaled_prob[l] = (scaled_prob[l] + scaled_prob[s]) - Decimal(1)
 
-    #     while small:
-    #         self.table_prob[small.pop()] = Decimal(1)
+            if scaled_prob[l] < 1:
+                small.append(l)
+            else:
+                large.append(l)
 
-    # def alias_generation(self):
-    #     """ Return a random outcome from the distribution. """
-    #     # Determine which column of table_prob to inspect
-    #     col = choice(self.table_prob_list)
+        # The remaining outcomes (of one stack) must have probability 1
+        while large:
+            self.table_prob[large.pop()] = Decimal(1)
 
-    #     # Determine which outcome to pick in that column
-    #     if self.table_prob[col] >= uniform(0, 1):
-    #         return col
-    #     else:
-    #         return self.table_alias[col]
+        while small:
+            self.table_prob[small.pop()] = Decimal(1)
 
-    # def sample_n(self, size):
-    #     """ Return a sample of size n from the distribution."""
-    #     # Ensure a non-negative integer as been specified
-    #     n = int(size)
-    #     if n <= 0:
-    #         raise ValueError(
-    #             "Please enter a non-negative integer for the number of samples desired: %d" % n)
+    def alias_generation(self):
+        """ Return a random outcome from the distribution. """
+        # Determine which column of table_prob to inspect
+        col = choice(self.table_prob_list)
 
-    #     return [self.alias_generation() for i in range(n)]
+        # Determine which outcome to pick in that column
+        if self.table_prob[col] >= uniform(0, 1):
+            return col
+        else:
+            return self.table_alias[col]
 
-    # def sample2dist(self, sample):
-    #     """ (list) -> dict (i.e {outcome:proportion})
-    #     Construct a distribution based on an observed sample (e.g. rolls of a bias die) """
-    #     increment = Decimal(1)/len(sample)
+    def sample_n(self, size):
+        """ Return a sample of size n from the distribution."""
+        # Ensure a non-negative integer as been specified
+        n = int(size)
+        if n <= 0:
+            raise ValueError(
+                "Please enter a non-negative integer for the number of samples desired: %d" % n)
 
-    #     dist = {}
-    #     get = dist.get
-    #     for o in sample:  # o for outcome
-    #         dist[o] = get(o, 0) + increment
-    #     return dist
+        return [self.alias_generation() for i in range(n)]
 
-    # HELPER FUNCTIONS
+    def sample2dist(self, sample):
+        """ (list) -> dict (i.e {outcome:proportion})
+        Construct a distribution based on an observed sample (e.g. rolls of a bias die) """
+        increment = Decimal(1)/len(sample)
+
+        dist = {}
+        get = dist.get
+        for o in sample:  # o for outcome
+            dist[o] = get(o, 0) + increment
+        return dist
 
 
 def print_histogram(word_list):
@@ -183,9 +179,8 @@ def print_histogram(word_list):
 def main():
     fish_words = ['one', 'fish', 'two', 'fish', 'red', 'fish', 'blue', 'fish']
     histogram = Dictogram(fish_words)
-    print(histogram.tokens)
-    print(histogram.types)
-    print(histogram.frequency('fish'))
+    print(histogram)
+    print(type(dict(histogram)))
 
 
 if __name__ == '__main__':
