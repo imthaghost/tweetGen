@@ -162,6 +162,7 @@ def get_words(file, val=None):
     with open(file, "r") as corpus:
         words = corpus.read().lower()
         words_list = re.sub(r'[^a-zA-Z\s]', '', words).split()
+
     return words_list
 
 
