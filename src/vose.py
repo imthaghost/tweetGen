@@ -131,7 +131,7 @@ class VoseAlias(object):
 
 
 # HELPER FUNCTIONS
-def get_words(file):
+def get_words(file, val=None):
     """Given a definition try matching a word to the definition :) 
 
         Parameters

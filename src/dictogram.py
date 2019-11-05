@@ -1,14 +1,12 @@
 #!python
 import os
 import re  # regular expression library
-from decimal import *
-from random import random, choice, uniform
-from dictionary_words import time_it
 import logging
+from decimal import *
+from dictionary_words import time_it
 from vose import VoseAlias, sample2dist
-
-
-# from __future__ import division, print_function  # Python 2 and 3 compatibility
+from random import random, choice, uniform
+from __future__ import division, print_function  # Python 2 and 3 compatibility
 
 
 class Dictogram(dict):
