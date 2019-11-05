@@ -3,16 +3,14 @@ import os
 import re  # regular expression library
 import logging
 from decimal import *
-from dictionary_words import time_it
 from vose import VoseAlias, sample2dist
 from random import random, choice, uniform
-from __future__ import division, print_function  # Python 2 and 3 compatibility
 
 
 class Dictogram(dict):
     """Dictogram is a histogram implemented as a subclass of the dict type."""
 
-    def __init__(self, path=None):
+    def __init__(self, wordlist, path=None):
         """ Initialize this histogram as a new dict and count given words.
             returns a histogram data structure that stores each unique word along with
             the number of times that the word appears in the source text
@@ -32,72 +30,109 @@ class Dictogram(dict):
         TypeError
             If ....
         """
-        super(Dictogram, self).__init__()  # Initialize this as a new dict
-        self.types = 0  # Count of distinct word types in this histogram
-        self.tokens = 0  # Total count of all word tokens in this histogram
-        self.word_count = 0  # word count
-        # self.table_prob_list = list(self.table_prob)
+        super().__init__()  # Initialize this as a new dict
         if path is not None:
-            some_words = []
-            # open the text file
-            with open(path, 'r') as f:
-                # convert all words to lowecase to catch exceptions and edge cases
-                words = f.read().lower()
-                # create a words list
-                words_list = re.sub(r'[^a-zA-Z\s]', '', words)
-                # reassign the list
-                some_words = words_list.split()
-                # set the amount of words in the list to the instance variable token
-                self.token = len(some_words)
-            # find all words
+            some_words = self.get_words(path)
             for word in some_words:
+                if word:
+                    self[word] = self.get(word, 0) + 1
+        else:
+            for word in wordlist:
                 if word:
                     self[word] = self.get(word, 0) + 1
         # after creating key-value pairs create instance variable that contains the sum of all values
         self.sum = sum([self.get(key, 0) for key in self])  # sum of weights
-        self.alias_initialisation()  # wtf
-        self.table_prob_list = list(self.table_prob)  # still not sure
+        # set the amount of words in the list to the instance variable token
+        # Count of distinct word types in this histogram
+        self.types = len(self)
+        self.tokens = sum(self.values())
+        self.word_count = 0  # word count
 
-    def alias_initialisation(self):
-        """ Construct probability and alias tables for the distribution. """
-        # Initialise variables
-        n = len(self)
-        self.table_prob = {}   # probability table
-        self.table_alias = {}  # alias table
-        scaled_prob = {}       # scaled probabilities
-        small = []             # stack for probabilities smaller that 1
-        large = []             # stack for probabilities greater than or equal to 1
+    def add_count(self, key):
+        if key not in self.keys():
+            return 0
+        else:
 
-        # Construct and sort the scaled probabilities into their appropriate stacks
-        for o, p in self.items():
-            scaled_prob[o] = Decimal(p) * n
+    def get_words(self, file):
+        """ file byte stream -> list
+        Return a list of words from a file. """
+        # Ensure the file is not empty
+        if os.stat(file).st_size == 0:
+            raise IOError(
+                "Please provide a file containing a corpus (not an empty file).")
+        # Ensure the file is text based (not binary). This is based on the implementation
+        #  of the Linux file command
+        textchars = bytearray([7, 8, 9, 10, 12, 13, 27]) + \
+            bytearray(range(0x20, 0x100))
+        with open(file, "rb") as bin_file:
+            if bool(bin_file.read(2048).translate(None, textchars)):
+                raise IOError(
+                    "Please provide a file containing text-based data.")
+        with open(file, "r") as corpus:
+            words = corpus.read().lower()
+            words_list = re.sub(r'[^a-zA-Z\s]', '', words).split()
+        return words_list
 
-            if scaled_prob[o] < 1:
-                small.append(o)
-            else:
-                large.append(o)
+    def frequency(self, word):
+        """returns the frequency in which a word is seen
 
-        # Construct the probability and alias tables
-        while small and large:
-            s = small.pop()
-            l = large.pop()
+            Parameters
+            ----------
+            path : word,
 
-            self.table_prob[s] = scaled_prob[s]
-            self.table_alias[s] = l
+            Returns
+            ----------
+            historgram: dict,
+                key value pair - (the unique words and amount of times the word appears)
+        """
+        if word in self.keys():
+            return self[word]
+        else:
+            return 0
 
-            scaled_prob[l] = (scaled_prob[l] + scaled_prob[s]) - Decimal(1)
+    def __contains__(self, target):
+        return True if target in self.keys() else False
 
-            if scaled_prob[l] < 1:
-                small.append(l)
-            else:
-                large.append(l)
+    # def alias_initialisation(self):
+    #     """ Construct probability and alias tables for the distribution. """
+    #     # Initialise variables
+    #     n = len(self)
+    #     self.table_prob = {}   # probability table
+    #     self.table_alias = {}  # alias table
+    #     scaled_prob = {}       # scaled probabilities
+    #     small = []             # stack for probabilities smaller that 1
+    #     large = []             # stack for probabilities greater than or equal to 1
 
-        # The remaining outcomes (of one stack) must have probability 1
-        while large:
-            self.table_prob[large.pop()] = Decimal(1)
+    #     # Construct and sort the scaled probabilities into their appropriate stacks
+    #     for o, p in self.items():
+    #         scaled_prob[o] = Decimal(p) * n
 
-        while small:
-            self.table_prob[small.pop()] = Decimal(1)
+    #         if scaled_prob[o] < 1:
+    #             small.append(o)
+    #         else:
+    #             large.append(o)
+
+    #     # Construct the probability and alias tables
+    #     while small and large:
+    #         s = small.pop()
+    #         l = large.pop()
+
+    #         self.table_prob[s] = scaled_prob[s]
+    #         self.table_alias[s] = l
+
+    #         scaled_prob[l] = (scaled_prob[l] + scaled_prob[s]) - Decimal(1)
+
+    #         if scaled_prob[l] < 1:
+    #             small.append(l)
+    #         else:
+    #             large.append(l)
+
+    #     # The remaining outcomes (of one stack) must have probability 1
+    #     while large:
+    #         self.table_prob[large.pop()] = Decimal(1)
+
+    #     while small:
+    #         self.table_prob[small.pop()] = Decimal(1)
 
     # def alias_generation(self):
     #     """ Return a random outcome from the distribution. """
@@ -120,30 +155,6 @@ class Dictogram(dict):
 
     #     return [self.alias_generation() for i in range(n)]
 
-    # HELPER FUNCTIONS
-
-    # def get_words(self, file):
-    #     """ (str) -> list
-    #     Return a list of words from a given corpus. """
-
-    #     # Ensure the file is not empty
-    #     if os.stat(file).st_size == 0:
-    #         raise IOError(
-    #             "Please provide a file containing a corpus (not an empty file).")
-
-    #     # Ensure the file is text based (not binary). This is based on the implementation
-    #     #  of the Linux file command
-    #     textchars = bytearray([7, 8, 9, 10, 12, 13, 27]) + \
-    #         bytearray(range(0x20, 0x100))
-    #     with open(file, "rb") as bin_file:
-    #         if bool(bin_file.read(2048).translate(None, textchars)):
-    #             raise IOError(
-    #                 "Please provide a file containing text-based data.")
-
-    #     with open(file, "r") as corpus:
-    #         words = corpus.read().split()
-    #     return words
-
     # def sample2dist(self, sample):
     #     """ (list) -> dict (i.e {outcome:proportion})
     #     Construct a distribution based on an observed sample (e.g. rolls of a bias die) """
@@ -155,49 +166,27 @@ class Dictogram(dict):
     #         dist[o] = get(o, 0) + increment
     #     return dist
 
-    def sample_it(self):
-        sample2dist(self)
-
-    @time_it
-    def frequency(self, word):
-        """returns the frequency in which a word is seen
-
-            Parameters
-            ----------
-            path : word,
-
-            Returns
-            ----------
-            historgram: dict,
-                key value pair - (the unique words and amount of times the word appears)
-        """
-        word = word.lower()
-        return self.get(word, 0)
-
-    def get_val(self, key):
-        return self[key]
-
-    def prob(self, key):
-        x = self.get_val(key) / self.sum
-        return x
+    # HELPER FUNCTIONS
 
 
-# def print_histogram(word_list):
-#     print('word list: {}'.format(word_list))
-#     # Create a dictogram and display its contents
-#     histogram = Dictogram(word_list)
-#     print('dictogram: {}'.format(histogram))
-#     print('{} tokens, {} types'.format(histogram.tokens, histogram.types))
-#     for word in word_list[-2:]:
-#         freq = histogram.frequency(word)
-#         print('{!r} occurs {} times'.format(word, freq))
-#     print()
+def print_histogram(word_list):
+    print('word list: {}'.format(word_list))
+    # Create a dictogram and display its contents
+    histogram = Dictogram(word_list)
+    print('dictogram: {}'.format(histogram))
+    print('{} tokens, {} types'.format(histogram.tokens, histogram.types))
+    for word in word_list[-2:]:
+        freq = histogram.frequency(word)
+        print('{!r} occurs {} times'.format(word, freq))
 
 
-# def main():
-#     histogram = Dictogram('/usr/share/dict/words')
-#     print(histogram.sample_it())
+def main():
+    fish_words = ['one', 'fish', 'two', 'fish', 'red', 'fish', 'blue', 'fish']
+    histogram = Dictogram(fish_words)
+    print(histogram.tokens)
+    print(histogram.types)
+    print(histogram.frequency('fish'))
 
 
-# if __name__ == '__main__':
-#     main()
+if __name__ == '__main__':
+    main()
