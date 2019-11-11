@@ -10,6 +10,7 @@ import pandas as pd
 from os import path
 from PIL import Image
 from src.vose import *
+from src.dictogram import *
 from threading import Thread
 import matplotlib.pyplot as plt
 from multiprocessing import Process, Manager, Pool
@@ -19,9 +20,7 @@ from flask import Flask, render_template, redirect, url_for, request, jsonify
 # name of application
 app = Flask(__name__)
 # generate corpus I will convert this to webcrawler later
-words = get_words('./corpus/thus.txt')
-# create histogram
-histogram = sample2dist(words)
+histogram = Dictogram(path='./corpus/thus.txt')
 # construct alias tables
 vose = VoseAlias(histogram)
 
@@ -43,8 +42,6 @@ def generation_pid(corpus, histogram=None):
         master[o] = master.get(o, 0) + 1
     histogram = master
     return histogram
-# master histogram
-# master = generation("./corpus/thus.txt")
 
 
 def transform_format(val):
@@ -71,8 +68,8 @@ def index():
     """
     # master histogram
     # generate a courpus
-    master = generation(
-        "./corpus/thus.txt")  # user the master histogram not the alias table
+    # use the master histogram not the alias table
+    master = generation('./corpus/thus.txt')
     # this will be the outline of our wordlcoud image
     outline = np.array(Image.open("./static/img/bird.png"))
     # convert image rgb bytes to an array
@@ -110,29 +107,29 @@ def index():
     return render_template('index.html')
 
 
-# @app.route('/generate', methods=['POST'])
-# def generate():
-#     """ generate
+@app.route('/generate', methods=['POST'])
+def generate():
+    """ generate
 
-#     @POST:
-#         summary:
-#         description:
-#         responses:
-#             200:
-#                 description:
-#             400:
-#                 description:
-#     """
-#     num = request.form.get('count')
-#     if num == None or num == 0:
-#         yeet = vose.sample_n(size=10)
-#         sentence = ' '.join(yeet).capitalize() + '.'
-#         print('sentence:' + sentence)
-#         return jsonify({'sentence': sentence})
-#     else:
-#         sample = vose.sample_n(size=num)
-#         sentence = ' '.join(sample).capitalize() + '.'
-#         return jsonify({'sentence': sentence})
+    @POST:
+        summary:
+        description:
+        responses:
+            200:
+                description:
+            400:
+                description:
+    """
+    num = request.form.get('count')
+    if num == None or num == 0:
+        yeet = vose.sample_n(size=10)
+        sentence = ' '.join(yeet).capitalize() + '.'
+        print('sentence:' + sentence)
+        return jsonify({'sentence': sentence})
+    else:
+        sample = vose.sample_n(size=num)
+        sentence = ' '.join(sample).capitalize() + '.'
+        return jsonify({'sentence': sentence})
 
 
 if __name__ == "__main__":
