@@ -4,15 +4,15 @@ import re  # regular expression library
 import time
 import logging
 from decimal import *
-from wrapper import time_it
-from threading import Threads
-from multiprocessing import Process
-from random import random, choice, uniform
+#from wrapper import time_it
+#from threading import Threads
+#from multiprocessing import Process
+from random import random, choice, uniform, randint
 
 
 class Dictogram(dict):
     """Dictogram is a histogram implemented as a subclass of the dict type."""
-    @time_it
+
     def __init__(self, wordlist=None, path=None):
         """ Initialize this histogram as a new dict and count given words.
             returns a histogram data structure that stores each unique word along with
@@ -34,15 +34,14 @@ class Dictogram(dict):
             If ....
         """
         super().__init__()  # Initialize this as a new dict
-        if path is not None:
+        if path:
             some_words = self.get_words(path)
             for word in some_words:
                 if word:
                     self[word] = self.get(word, 0) + 1
-        if wordlist is not None:
+        if wordlist:
             for word in wordlist:
-                if word:
-                    self[word] = self.get(word, 0) + 1
+                self[word] = self.get(word, 0) + 1
         # after creating key-value pairs create instance variable that contains the sum of all values
         self.sum = sum([self.get(key, 0) for key in self])  # sum of weights
         # set the amount of words in the list to the instance variable token
@@ -75,7 +74,6 @@ class Dictogram(dict):
         self[word] = self.get(word, 0) + count
         self.types = len(self)
 
-    @time_it
     def get_words(self, file):
         """ file byte stream -> list
         Return a list of words from a file. """
@@ -96,8 +94,7 @@ class Dictogram(dict):
             words_list = re.sub(r'[^a-zA-Z\s]', '', words).split()
         return words_list
 
-    @time_it
-    def sample(self, num):
+    def sample(self, num=1):
         v = VoseAlias(self)
         return v.sample_n(num)
 
@@ -202,7 +199,6 @@ class VoseAlias(object):
         else:
             return self.table_alias[col]
 
-    @time_it
     def sample_n(self, size):
         """Given a definition try matching a word to the definition :)
 
@@ -229,19 +225,25 @@ class VoseAlias(object):
 def print_histogram(word_list):
     print('word list: {}'.format(word_list))
     # Create a dictogram and display its contents
-    histogram = Dictogram(word_list)
+    histogram = Dictogram(wordlist=word_list)
     print('dictogram: {}'.format(histogram))
     print('{} tokens, {} types'.format(histogram.tokens, histogram.types))
     for word in word_list[-2:]:
         freq = histogram.frequency(word)
         print('{!r} occurs {} times'.format(word, freq))
+    print_histogram_samples(histogram)
 
 
 def print_histogram_samples(histogram):
     print('Histogram samples:')
     # Sample the histogram 10,000 times and count frequency of results
-    samples_list = [histogram.sample() for _ in range(10000)]
-    samples_hist = Dictogram(samples_list)
+    sample_list = []
+    for x in range(10000):
+        sample_list.append(histogram.sample())
+    samples = []
+    for arrs in sample_list:
+        samples.append(arrs[0])
+    samples_hist = Dictogram(wordlist=samples)
     print('samples: {}'.format(samples_hist))
     print()
     print('Sampled frequency and error from observed frequency:')
@@ -268,17 +270,19 @@ def print_histogram_samples(histogram):
             error) < 0.1 else red
         print('| {!r:<9} '.format(word)
               + '| {:>4} = {:>6.2%} '.format(count, observed_freq)
-              + '| {:>4} = {:>6.2%} '.format(samples, sampled_freq)
-              + '| {}{:>+7.2%}{} |'.format(color, error, reset))
+                + '| {:>4} = {:>6.2%} '.format(samples, sampled_freq)
+                + '| {}{:>+7.2%}{} |'.format(color, error, reset))
     print(divider)
     print()
 
 
 def main():
-    # fish_words = ['one', 'fish', 'two', 'fish', 'red', 'fish', 'blue', 'fish']
-    histogram = Dictogram(path='thus.txt')
+
+    # histogram = Dictogram(path='thus.txt')
     # print(type(dict(histogram)))
-    print(histogram.sample(10))
+    # print(histogram.sample(10))
+    # fish_words = ['one', 'fish', 'two', 'fish', 'red', 'fish', 'blue', 'fish']
+    # print_histogram(fish_words)
 
 
 if __name__ == '__main__':
