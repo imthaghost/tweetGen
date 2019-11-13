@@ -37,3 +37,32 @@ def anagram_gen(word):
                 yield perm[:i] + word[0:1] + perm[i:]
 
 ################################### Generator ############################
+
+## https://github.com/tempor1s/tweetgen/blob/master/lib/bin/anagram.py ###
+
+## works if you use sets ####
+
+
+def get_real_anagram(s):
+    """
+    Get all the anagrams for a given word
+    Params:
+        s: The word that you want to get all the anagrams for
+    Returns:
+        set: All of the anagrams
+    """
+    anagrams_variations = get_anagram(s)
+    words = get_set_words_from_file('/usr/share/dict/words')
+
+    return anagrams_variations.intersection(words)
+    # real_words = []
+    # for word in words:
+    #     if word in anagrams_variations:
+    #         real_words.append(word)
+
+    # # for word in anagrams_variations:
+    # #     if word in words:
+    # #         real_words.append(word)
+
+    # return real_words
+## works if you use sets ####
