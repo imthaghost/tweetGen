@@ -1,8 +1,40 @@
+
+class Node(object):
+
+    def __init__(self, data):
+        """ Initialize this node with the given data.
+        Parameters
+        ----------
+        data : type[any]
+            the data that the node can contain can be any type
+
+        Attributes
+        ----------
+        data : type[any]
+            the data that the node can contain can be any type
+        next : Node,
+            pointer to another node
+
+        Returns
+        ----------
+        Node: object,
+            A node is a basic unit of a data structure,
+            such as a linked list or tree data structure
+        """
+        self.data = data
+        self.next = None
+
+    def __repr__(self):
+        """Return a string representation of this node."""
+        return 'Node({!r})'.format(self.data)
+
+
 class DoublyLinkedList(object):
 
     # Constructor for empty Doubly Linked List
     def __init__(self):
         self.head = None
+        self.tail = None
 
     def push(self, new_data):
 
@@ -66,6 +98,9 @@ class DoublyLinkedList(object):
 
         return
 
+    def length(self):
+        pass
+
     def printList(self, node):
 
         while(node is not None):
@@ -76,3 +111,37 @@ class DoublyLinkedList(object):
         while(last is not None):
             print(" % d" % (last.data)),
             last = last.prev
+
+
+def test_linked_list():
+    ll = DoublyLinkedList()
+    print('list: {}'.format(ll))
+
+    print('\nTesting append:')
+    for item in ['A', 'B', 'C']:
+        print('append({!r})'.format(item))
+        ll.append(item)
+        print('list: {}'.format(ll))
+
+    print('head: {}'.format(ll.head))
+    print('tail: {}'.format(ll.tail))
+
+    print('length: {}'.format(ll.length()))
+    print(ll.head.data)
+
+    # Enable this after implementing delete method
+    delete_implemented = False
+    if delete_implemented:
+        print('\nTesting delete:')
+        for item in ['B', 'C', 'A']:
+            print('delete({!r})'.format(item))
+            ll.delete(item)
+            print('list: {}'.format(ll))
+
+        print('head: {}'.format(ll.head))
+        print('tail: {}'.format(ll.tail))
+        print('length: {}'.format(ll.length()))
+
+
+if __name__ == '__main__':
+    test_linked_list()
