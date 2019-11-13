@@ -1,6 +1,4 @@
 #!python
-
-
 class Node(object):
 
     def __init__(self, data):
@@ -11,6 +9,22 @@ class Node(object):
     def __repr__(self):
         """Return a string representation of this node."""
         return 'Node({!r})'.format(self.data)
+
+
+class LinkedListIterator:
+    def __init__(self, head):
+        self.current = head
+
+    def __iter__(self):
+        return self
+
+    def __next__(self):
+        if not self.current:
+            raise StopIteration
+        else:
+            item = self.current.get_data()
+            self.current = self.current.get_next()
+            return item
 
 
 class LinkedList(object):
@@ -24,6 +38,10 @@ class LinkedList(object):
             for item in items:
                 self.append(item)
 
+    def __iter__(self):
+        """Initialize object with iterable property"""
+        return LinkedListIterator(self.head)
+
     def __str__(self):
         """Return a formatted string representation of this linked list."""
         items = ['({!r})'.format(item) for item in self.items()]
@@ -32,6 +50,18 @@ class LinkedList(object):
     def __repr__(self):
         """Return a string representation of this linked list."""
         return 'LinkedList({!r})'.format(self.items())
+
+    def append(self, item):
+        """Insert the given item at the tail of this linked list.
+        TODO: Running time: O(???) Why and under what conditions?"""
+        # TODO: Create new node to hold given item
+        # TODO: Append node after tail, if it exists
+
+    def prepend(self, item):
+        """Insert the given item at the head of this linked list.
+        TODO: Running time: O(???) Why and under what conditions?"""
+        # TODO: Create new node to hold given item
+        # TODO: Prepend node before head, if it exists
 
     def items(self):
         """Return a list (dynamic array) of all items in this linked list.
@@ -56,18 +86,6 @@ class LinkedList(object):
         """Return the length of this linked list by traversing its nodes.
         TODO: Running time: O(???) Why and under what conditions?"""
         # TODO: Loop through all nodes and count one for each
-
-    def append(self, item):
-        """Insert the given item at the tail of this linked list.
-        TODO: Running time: O(???) Why and under what conditions?"""
-        # TODO: Create new node to hold given item
-        # TODO: Append node after tail, if it exists
-
-    def prepend(self, item):
-        """Insert the given item at the head of this linked list.
-        TODO: Running time: O(???) Why and under what conditions?"""
-        # TODO: Create new node to hold given item
-        # TODO: Prepend node before head, if it exists
 
     def find(self, quality):
         """Return an item from this linked list satisfying the given quality.
