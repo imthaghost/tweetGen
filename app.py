@@ -25,23 +25,36 @@ histogram = Dictogram(path='./corpus/thus.txt')
 vose = VoseAlias(histogram)
 
 
-def generation(corpus):
+def generation(file):
+    histogram = {}
     # genration function for master historgram
-    master = {}
-    print('generating master histogram')
-    for o in corpus:  # o for outcome
-        master[o] = master.get(o, 0) + 1
-    return master
+    if os.stat(file).st_size == 0:
+        raise IOError(
+            "Please provide a file containing a corpus (not an empty file).")
+    # Ensure the file is text based (not binary). This is based on the implementation
+    #  of the Linux file command
+    textchars = bytearray([7, 8, 9, 10, 12, 13, 27]) + \
+        bytearray(range(0x20, 0x100))
+    with open(file, "rb") as bin_file:
+        if bool(bin_file.read(2048).translate(None, textchars)):
+            raise IOError("Please provide a file containing text-based data.")
+    with open(file, "r") as corpus:
+        words = corpus.read().lower()
+        words_list = re.sub(r'[^a-zA-Z\s]', '', words).split()
 
-
-def generation_pid(corpus, histogram=None):
-    # genration function for master historgram
-    master = {}
-    print('generating master histogram')
-    for o in corpus:  # o for outcome
-        master[o] = master.get(o, 0) + 1
-    histogram = master
+    for o in words_list:  # o for outcome
+        histogram[o] = histogram.get(o, 0) + 1
     return histogram
+
+
+# def generation_pid(corpus, histogram=None):
+#     # genration function for master historgram
+#     master = {}
+#     print('generating master histogram')
+#     for o in corpus:  # o for outcome
+#         master[o] = master.get(o, 0) + 1
+#     histogram = master
+#     return histogram
 
 
 def transform_format(val):
@@ -117,8 +130,10 @@ def generate():
         responses:
             200:
                 description:
-            400:
+                    POST request recieved by server
+            500:
                 description:
+                    server encounted exception
     """
     num = request.form.get('count')
     if num == None or num == 0:
@@ -130,6 +145,11 @@ def generate():
         sample = vose.sample_n(size=num)
         sentence = ' '.join(sample).capitalize() + '.'
         return jsonify({'sentence': sentence})
+
+
+class generation(object):
+    __init__(self, file):
+        self.file = file
 
 
 if __name__ == "__main__":
