@@ -18,7 +18,7 @@ class Node(object):
         Returns
         ----------
         Node: object,
-            A node is a basic unit of a data structure, 
+            A node is a basic unit of a data structure,
             such as a linked list or tree data structure
         """
         self.data = data
@@ -76,6 +76,7 @@ class LinkedList(object):
 
     def __iter__(self):
         """Initialize object with iterable property"""
+
         return LinkedListIterator(self.head)
 
     def __str__(self):
@@ -93,19 +94,24 @@ class LinkedList(object):
         # if empty, then make the new node as head
         if self.head is None:
             self.head = new_node
+            self.tail = new_node
             return  # break
         # else traverse till the last node
         last = self.head
-        while (last.next):
+        while last.next:
             last = last.next
 
         # change the next of last node
         last.next = new_node
+        self.tail = new_node
 
-    def push(self, item):
+    def prepend(self, item):
         """Insert the given item at the head of this linked list."""
         # Allocate the data with the the node object
         new_node = Node(item)
+        if not self.head:
+            self.append(item)
+            return  # break
         # Make next of new Node as head
         new_node.next = self.head
         # Move the head to point to new Node
@@ -137,7 +143,6 @@ class LinkedList(object):
             ----------
             Return a boolean indicating whether this linked list is empty.
         """
-
         return self.head is None
 
     def count(self, node):
@@ -154,20 +159,49 @@ class LinkedList(object):
     def find(self, quality):
         """Return an item from this linked list satisfying the given quality."""
         # Base case
-        if(not li):
-            return False
+        if not self.head:
+            return None
 
-        # If key is present in
-        # current node, return true
-        if(li.data == key):
-            return True
+        node = self.head
 
-        # Recur for remaining list
-        return self.search(li.next, key)
+        while node:
+            if self.data == quality:
+                self.search(self.next, quality)
 
     def delete(self, item):
-        pass
         """Delete the given item from this linked list, or raise ValueError."""
+        if self.head == None:
+            raise ValueError
+
+        # Store head node
+        temp = self.head
+
+        # If head needs to be removed
+        if position == 0:
+            self.head = temp.next
+            temp = None
+            return
+
+        # Find previous node of the node to be deleted
+        for i in range(position - 1):
+            temp = temp.next
+            if temp is None:
+                break
+
+        # If position is more than number of nodes
+        if temp is None:
+            return
+        if temp.next is None:
+            return
+
+        # Node temp.next is the node to be deleted
+        # store pointer to the next of node to be deleted
+        next = temp.next.next
+
+        # Unlink the node from linked list
+        temp.next = None
+
+        temp.next = nex
 
 
 def test_linked_list():
@@ -184,6 +218,7 @@ def test_linked_list():
     print('tail: {}'.format(ll.tail))
 
     print('length: {}'.format(ll.length()))
+    print(ll.head.data)
 
     # Enable this after implementing delete method
     delete_implemented = False
