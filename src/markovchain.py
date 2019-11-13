@@ -15,7 +15,7 @@ class MarkovChain(dict):
                 {'state1': {'state1': 0.1, 'state2': 0.4}, 
                  'state2': {...}}
         """
-        super().__init__
+        super().__init__()
         self.transition_prob = transition_prob
         self.states = list(transition_prob.keys())
 
