@@ -277,6 +277,7 @@ def print_histogram_samples(histogram):
 
 
 def main():
+    pass
 
     # histogram = Dictogram(path='thus.txt')
     # print(type(dict(histogram)))
