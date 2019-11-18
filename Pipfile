@@ -12,9 +12,9 @@ beautifulsoup4 = "*"
 requests = "*"
 numpy = "*"
 pandas = "*"
-wordcloud = "*"
 matplotlib = "*"
 pillow = "*"
+wordcloud = "*"
 
 [requires]
 python_version = "3.7"
