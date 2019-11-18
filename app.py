@@ -47,16 +47,6 @@ def generation(file):
     return histogram
 
 
-# def generation_pid(corpus, histogram=None):
-#     # genration function for master historgram
-#     master = {}
-#     print('generating master histogram')
-#     for o in corpus:  # o for outcome
-#         master[o] = master.get(o, 0) + 1
-#     histogram = master
-#     return histogram
-
-
 def transform_format(val):
     # helper function for transforming image colors
     if val == 0:

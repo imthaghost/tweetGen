@@ -4,9 +4,9 @@ import re  # regular expression library
 import time
 import logging
 from decimal import *
-#from wrapper import time_it
-#from threading import Threads
-#from multiprocessing import Process
+from src.wrapper import time_it
+from threading import Threads
+from multiprocessing import Process
 from random import random, choice, uniform, randint
 
 
@@ -97,6 +97,10 @@ class Dictogram(dict):
     def sample(self, num=1):
         v = VoseAlias(self)
         return v.sample_n(num)
+
+    def sort(self):
+        for key in sorted(self.keys()):
+            print("%s: %s" % (key, self[key]))
 
 
 class VoseAlias(object):
@@ -222,68 +226,64 @@ class VoseAlias(object):
         return [self.alias_generation() for i in range(n)]
 
 
-def print_histogram(word_list):
-    print('word list: {}'.format(word_list))
-    # Create a dictogram and display its contents
-    histogram = Dictogram(wordlist=word_list)
-    print('dictogram: {}'.format(histogram))
-    print('{} tokens, {} types'.format(histogram.tokens, histogram.types))
-    for word in word_list[-2:]:
-        freq = histogram.frequency(word)
-        print('{!r} occurs {} times'.format(word, freq))
-    print_histogram_samples(histogram)
+# def print_histogram(word_list):
+#     print('word list: {}'.format(word_list))
+#     # Create a dictogram and display its contents
+#     histogram = Dictogram(wordlist=word_list)
+#     print('dictogram: {}'.format(histogram))
+#     print('{} tokens, {} types'.format(histogram.tokens, histogram.types))
+#     for word in word_list[-2:]:
+#         freq = histogram.frequency(word)
+#         print('{!r} occurs {} times'.format(word, freq))
+#     print_histogram_samples(histogram)
 
 
-def print_histogram_samples(histogram):
-    print('Histogram samples:')
-    # Sample the histogram 10,000 times and count frequency of results
-    sample_list = []
-    for x in range(10000):
-        sample_list.append(histogram.sample())
-    samples = []
-    for arrs in sample_list:
-        samples.append(arrs[0])
-    samples_hist = Dictogram(wordlist=samples)
-    print('samples: {}'.format(samples_hist))
-    print()
-    print('Sampled frequency and error from observed frequency:')
-    header = '| word type | observed freq | sampled freq  |  error  |'
-    divider = '-' * len(header)
-    print(divider)
-    print(header)
-    print(divider)
-    # Colors for error
-    green = '\033[32m'
-    yellow = '\033[33m'
-    red = '\033[31m'
-    reset = '\033[m'
-    # Check each word in original histogram
-    for word, count in histogram.items():
-        # Calculate word's observed frequency
-        observed_freq = count / histogram.tokens
-        # Calculate word's sampled frequency
-        samples = samples_hist.frequency(word)
-        sampled_freq = samples / samples_hist.tokens
-        # Calculate error between word's sampled and observed frequency
-        error = (sampled_freq - observed_freq) / observed_freq
-        color = green if abs(error) < 0.05 else yellow if abs(
-            error) < 0.1 else red
-        print('| {!r:<9} '.format(word)
-              + '| {:>4} = {:>6.2%} '.format(count, observed_freq)
-                + '| {:>4} = {:>6.2%} '.format(samples, sampled_freq)
-                + '| {}{:>+7.2%}{} |'.format(color, error, reset))
-    print(divider)
-    print()
+# def print_histogram_samples(histogram):
+#     print('Histogram samples:')
+#     # Sample the histogram 10,000 times and count frequency of results
+#     sample_list = []
+#     for x in range(10000):
+#         sample_list.append(histogram.sample())
+#     samples = []
+#     for arrs in sample_list:
+#         samples.append(arrs[0])
+#     samples_hist = Dictogram(wordlist=samples)
+#     print('samples: {}'.format(samples_hist))
+#     print()
+#     print('Sampled frequency and error from observed frequency:')
+#     header = '| word type | observed freq | sampled freq  |  error  |'
+#     divider = '-' * len(header)
+#     print(divider)
+#     print(header)
+#     print(divider)
+#     # Colors for error
+#     green = '\033[32m'
+#     yellow = '\033[33m'
+#     red = '\033[31m'
+#     reset = '\033[m'
+#     # Check each word in original histogram
+#     for word, count in histogram.items():
+#         # Calculate word's observed frequency
+#         observed_freq = count / histogram.tokens
+#         # Calculate word's sampled frequency
+#         samples = samples_hist.frequency(word)
+#         sampled_freq = samples / samples_hist.tokens
+#         # Calculate error between word's sampled and observed frequency
+#         error = (sampled_freq - observed_freq) / observed_freq
+#         color = green if abs(error) < 0.05 else yellow if abs(
+#             error) < 0.1 else red
+#         print('| {!r:<9} '.format(word)
+#               + '| {:>4} = {:>6.2%} '.format(count, observed_freq)
+#                 + '| {:>4} = {:>6.2%} '.format(samples, sampled_freq)
+#                 + '| {}{:>+7.2%}{} |'.format(color, error, reset))
+#     print(divider)
+#     print()
 
 
 def main():
-    pass
 
-    # histogram = Dictogram(path='thus.txt')
-    # print(type(dict(histogram)))
-    # print(histogram.sample(10))
-    # fish_words = ['one', 'fish', 'two', 'fish', 'red', 'fish', 'blue', 'fish']
-    # print_histogram(fish_words)
+    histogram = Dictogram(path='../corpus/thus.txt')
+    print(histogram.sample(10))
 
 
 if __name__ == '__main__':
