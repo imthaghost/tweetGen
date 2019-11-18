@@ -1,11 +1,10 @@
 Markov Chain Tweet generator
-[![Build Status][travis-image]][travis-url]
 
 <img src="/static/img/gen.png" width="55%"></img>
 
 ## Description
 
-tweetGen generates tweets from a any given corpus. The sentences are calculated via a stochastic model describing a sequence of possible events in which the probability of each event depends only on the state attained in the previous event (Markov Chain).
+tweetGen generates tweets from any given corpus. The sentences are calculated via a stochastic model describing a sequence of possible events in which the probability of each event depends only on the state attained in the previous event (Markov Chain).
 
 ### Prerequisites
 
