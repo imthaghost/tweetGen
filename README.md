@@ -1,11 +1,12 @@
-Markov Chain Tweet generator
 <a href="https://www.google.com/search?q=twitter+icon&source=lnms&tbm=isch&sa=X&ved=0ahUKEwingJCUgvPlAhWYsp4KHWpXBVYQ_AUIEigB&biw=1440&bih=788#imgrc=4-NyAF10t5J6BM:"><img src="/static/img/icon.png" title="Twitter Icon"></a>
+
+Markov Chain Tweet generator
 
 ## Description
 
 tweetGen generates tweets from any given corpus. The sentences are calculated via a stochastic model describing a sequence of possible events in which the probability of each event depends only on the state attained in the previous event (Markov Chain).
 
-![Recordit GIF](//static/gen.gif)
+![Recordit GIF](/static/gen.gif)
 
 ### Prerequisites
 
