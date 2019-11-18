@@ -1,10 +1,11 @@
 Markov Chain Tweet generator
-
-<img src="/static/img/gen.png" width="55%"></img>
+<a href="https://www.google.com/search?q=twitter+icon&source=lnms&tbm=isch&sa=X&ved=0ahUKEwingJCUgvPlAhWYsp4KHWpXBVYQ_AUIEigB&biw=1440&bih=788#imgrc=4-NyAF10t5J6BM:"><img src="/static/img/icon.png" title="Twitter Icon"></a>
 
 ## Description
 
 tweetGen generates tweets from any given corpus. The sentences are calculated via a stochastic model describing a sequence of possible events in which the probability of each event depends only on the state attained in the previous event (Markov Chain).
+
+![Recordit GIF](//static/gen.gif)
 
 ### Prerequisites
 
@@ -49,7 +50,7 @@ pipenv install
 python3 app.py
 ```
 
-This also assumes that you have `brew` installed. After cloning the repository in desired directory we run the command `pipenv shell` to initialize and activate our virtual enviornment. Unless specified pipenv will default to whatever virtualenv defaults to. We then allow pipenv to find and install the necessary modules for our server. All modules can be viewed inside the file `Pipfile` under the [packages] section. We then run our PostgreSQL database as a background process, the server uses postgresql's defaults(database name and user `postgre`). We then start running the server on port 8080.
+This also assumes that you have `brew` installed. After cloning the repository in desired directory we run the command `pipenv shell` to initialize and activate our virtual enviornment. Unless specified pipenv will default to whatever virtualenv defaults to. We then allow pipenv to find and install the necessary modules for our server. All modules can be viewed inside the file `Pipfile` under the [packages] section. We then start running the server on port 8080.
 
 ## Running Application
 
@@ -57,12 +58,6 @@ This also assumes that you have `brew` installed. After cloning the repository i
 
 Fork the current repository and then make the changes that you'd like to said fork. Upon adding features, fixing bugs,
 or whatever modifications you've made to the project, issue a pull request to this repository containing the changes that you've made!
-
-## Goals
-
-## Short term goals
-
-## Deployment
 
 ## Built With
 
