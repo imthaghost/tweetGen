@@ -85,6 +85,7 @@ class LinkedList(object):
         """
         self.head = None  # First node
         self.tail = None  # Last node
+        self.size = 0
         # Append given items
         if items is not None:
             for item in items:
@@ -163,20 +164,17 @@ class LinkedList(object):
 
     def append(self, item):
         """Insert the given item at the tail of this linked list."""
-        new_node = Node(item)
-        # if empty, then make the new node as head
+        node = Node(item)
+        # If head is none, set node to head and tail and then return
         if self.head is None:
-            self.head = new_node
-            self.tail = new_node
-            return  # break
-        # else traverse till the last node
-        last = self.head
-        while last.next:
-            last = last.next
+            self.head = node
+            self.tail = node
+            self.size += 1
+            return
 
-        # change the next of last node
-        last.next = new_node
-        self.tail = new_node
+        self.tail.next = node
+        self.tail = node
+        self.size += 1  # increment size by 1
 
     def prepend(self, item):
         """Insert the given item at the head of this linked list.
@@ -199,38 +197,41 @@ class LinkedList(object):
 
     def delete(self, item):
         """Delete the given item from this linked list, or raise ValueError."""
-        if self.head == None:
-            raise ValueError
+        node = self.head
+        prev = None
 
-        # Store head node
-        temp = self.head
+        # If the linked list is empty, raise a value error
+        if not node:
+            raise ValueError(f'Item not found: {item}')
 
-        # If head needs to be removed
-        if position == 0:
-            self.head = temp.next
-            temp = None
-            return
-
-        # Find previous node of the node to be deleted
-        for i in range(position - 1):
-            temp = temp.next
-            if temp is None:
-                break
-
-        # If position is more than number of nodes
-        if temp is None:
-            return
-        if temp.next is None:
-            return
-
-        # Node temp.next is the node to be deleted
-        # store pointer to the next of node to be deleted
-        next = temp.next.next
-
-        # Unlink the node from linked list
-        temp.next = None
-
-        temp.next = next
+        # While node is not None
+        while node:
+            # Check if the node's data is what we are looking for
+            if node.data == item:
+                # item we want to remove is the head node because we have not updated the value yet
+                if prev is None:
+                    # Set head to be head nodes next
+                    self.head = node.next
+                    # if head node is also the tail node
+                    if node.next is None:
+                        self.tail = None
+                # second case is that the item we want to remove is at the tail
+                elif node.next is None:
+                    # Set the previous nodes next to be none, and set it to the new tail
+                    prev.next = None
+                    self.tail = prev
+                # third caise is that the item we want to remove is somewhere in the middle
+                else:
+                    # unlink the current node
+                    prev.next = node.next
+                # reduce the size by 1 because we just deleted an item
+                self.size -= 1
+                # so we do not infinite loop
+                return
+            else:
+                # node has not been found set so update temp values
+                prev = node
+                node = node.next
 
     def replace(self, item):
         # find the item in the list return value error otherwise
