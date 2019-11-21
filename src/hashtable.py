@@ -10,6 +10,9 @@ class HashTable(object):
         # Create a new list (used as fixed-size array) of empty linked lists
         self.buckets = [LinkedList() for _ in range(init_size)]
 
+    def __hash__(self):
+        pass
+
     def __str__(self):
         """Return a formatted string representation of this hash table."""
         items = ['{!r}: {!r}'.format(key, val) for key, val in self.items()]
@@ -69,6 +72,9 @@ class HashTable(object):
         # TODO: If found, return value associated with given key
         # TODO: Otherwise, raise error to tell user get failed
         # Hint: raise KeyError('Key not found: {}'.format(key))
+
+    def find(self, key):
+        pass
 
     def set(self, key, value):
         """Insert or update the given key with its associated value.

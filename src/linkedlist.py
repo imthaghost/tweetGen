@@ -246,14 +246,15 @@ class LinkedList(object):
     def find(self, quality):
         """Return an item from this linked list satisfying the given quality."""
         # Base case
-        if not self.head:
-            return None
-
         node = self.head
 
         while node:
-            if self.data == quality:
-                self.search(self.next, quality)
+            if quality(node.data) == True:
+                return node.data
+            else:
+                node = node.next
+
+        return None
 
 
 def test_linked_list():

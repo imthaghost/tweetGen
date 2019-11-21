@@ -13,59 +13,6 @@ from src.vose import *
 valid_folder = "../corpus/valid_folder/"
 invalid_folder = "../corpus/invalid_folder/"
 
-empty_file_error = "Please provide a file containing a corpus (not an empty file)."
-
-binary_file_error = "Please provide a file containing text-based data."
-nonnegative_integer_error = "Please enter a non-negative integer for the number of samples desired: "
-
-
-# class TestValidation(unittest.TestCase):
-#     """ unittest methods for testing validation checks within vose_sampler
-#     work as expected. """
-
-# def test_empty_file(self):
-#     """Test vose_sampler.get_words against empty files """
-#     self.assertRaisesRegex(
-#         IOError, empty_file_error, get_words, invalid_folder + "empty.txt")
-
-#     def test_binary_file1(self):
-#         """Test vose_sampler.get_words against .epub files """
-#         self.assertRaisesRegex(IOError, binary_file_error,
-#                                get_words, invalid_folder + "Alice.epub")
-
-#     def test_binary_file2(self):
-#         """Test vose_sampler.get_words against .mobi files """
-#         self.assertRaisesRegex(IOError, binary_file_error,
-#                                get_words, invalid_folder + "Alice.mobi")
-
-#     def test_binary_file3(self):
-#         """Test vose_sampler.get_words against .pdf files """
-#         self.assertRaisesRegex(IOError, binary_file_error,
-#                                get_words, invalid_folder + "Alice.pdf")
-
-#     def test_binary_file4(self):
-#         """Test vose_sampler.get_words against .wav files """
-#         self.assertRaisesRegex(IOError, binary_file_error,
-#                                get_words, invalid_folder + "zero.wav")
-
-#     def test_negative_integer(self):
-#         """Test vose_sampler.VoseAlias.alias_generation against a size
-#         specified by a negative integer. """
-#         words = get_words(valid_folder + "small.txt")
-#         word_dist = sample2dist(words)
-#         VA_words = VoseAlias(word_dist)
-#         self.assertRaisesRegex(
-#             ValueError, nonnegative_integer_error + "-1",  VA_words.sample_n, -1)
-
-#     def test_zero_integer(self):
-#         """Test vose_sampler.ProbDistribution.alias_generation against a size
-#         defined by zero. """
-#         words = get_words(valid_folder + "small.txt")
-#         word_dist = sample2dist(words)
-#         VA_words = VoseAlias(word_dist)
-#         self.assertRaisesRegex(
-#             ValueError, nonnegative_integer_error + "0",  VA_words.sample_n, 0)
-
 
 class TestAccuracy(unittest.TestCase):
     """ unittest methods for testing the accuracy of method within vose_sampler. """
@@ -78,14 +25,14 @@ class TestAccuracy(unittest.TestCase):
         return C * p**x * (1-p)**(n-x)
 
     def test_output_get_word(self):
-        """Test vose_sampler.get_words to ensure it correctly produces a list of
+        """Test get_words to ensure it correctly produces a list of
         words from a given corpus. """
         actual = get_words('../corpus/alice.txt')
         expected = ["alice"]
         self.assertEqual(actual, expected)
 
     def test_output_create_dist(self):
-        """Test vose_sampler.ProbDistribution.create_dist to ensure it correctly
+        """Test ProbDistribution.create_dist to ensure it correctly
         produces a uniform distribution for a list of words representing a standard die. """
         numbers_dist = sample2dist(
             ["one", "two", "three", "four", "five", "six"])
