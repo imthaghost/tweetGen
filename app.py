@@ -127,8 +127,8 @@ def generate():
     """
     num = request.form.get('count')
     if num == None or num == 0:
-        yeet = vose.sample_n(size=10)
-        sentence = ' '.join(yeet).capitalize() + '.'
+        sample = vose.sample_n(size=10)
+        sentence = ' '.join(sample).capitalize() + '.'
         print('sentence:' + sentence)
         return jsonify({'sentence': sentence})
     else:

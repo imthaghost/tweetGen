@@ -50,18 +50,18 @@ def dictionary(path='/usr/share/dict/words', num=1):
         TypeError
             If no no or 1 parameter was given...requires two keyword parameters path and ammount
         """
-    with open(path, "r") as yeet:
-        words = yeet.read().split('\n')
-        rand_word_or_words_are_we_really_here_for_naming_convention = []
+    with open(path, "r") as file:
+        words = file.read().split('\n')
+        word_list = []
         for i in range(int(num)):
-            rand_word_or_words_are_we_really_here_for_naming_convention.append(
+            word_list.append(
                 choice(words))
-        return ' '.join(rand_word_or_words_are_we_really_here_for_naming_convention).capitalize() + '.'
+        return ' '.join(word_list).capitalize() + '.'
 
 
 def get_word(path='/usr/share/dict/words'):
-    with open(path, "r") as yeet:
-        word = yeet.read().split('\n')
+    with open(path, "r") as file:
+        word = file.read().split('\n')
         rand_word = choice(word)
         return rand_word
 
