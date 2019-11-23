@@ -124,6 +124,9 @@ class LinkedList(object):
             Returns
             ----------
             Return a boolean indicating whether this linked list is empty.
+        Best Case: O(1) for n items in the list(length)
+        Worst Case: O(1) for n items in the list(length)
+        Reason: We only have to check the head node
         """
         return self.head is None
 
@@ -139,6 +142,10 @@ class LinkedList(object):
             return 1 + self.count(node.next)
 
     def length(self):
+        """ Return the length of the list
+        Best Case: O(1) for n items in the list(length)
+        Worst Case: O(1) for n items in the list(length)
+        Reason: We only have to check the head node"""
         # wrapper for returning the length of the linked list
         return self.count(self.head)
 
@@ -163,7 +170,11 @@ class LinkedList(object):
         return items  # O(1) time to return list
 
     def append(self, item):
-        """Insert the given item at the tail of this linked list."""
+        """Insert the given item at the tail of this linked list.
+        Best Case: O(1) for n items in the list(length)
+        Worst Case: O(1) for n items in the list(length)
+        Reason: We only have to check the tail node
+        """
         node = Node(item)
         # If head is none, set node to head and tail and then return
         if self.head is None:
@@ -178,13 +189,15 @@ class LinkedList(object):
 
     def prepend(self, item):
         """Insert the given item at the head of this linked list.
+        Best Case: O(1) for n items in the list(length)
+        Worst Case: O(1) for n items in the list(length)
+        Reason: We only have to check the head node
 
-            Parameters
-            ----------
-            item: object
+        Parameters
+        ----------
+        item: object
 
         """
-        """"""
         # Allocate the data with the the node object
         new_node = Node(item)
         if not self.head:
@@ -196,12 +209,17 @@ class LinkedList(object):
         self.head = new_node
 
     def delete(self, item):
-        """Delete the given item from this linked list, or raise ValueError."""
+        """Delete the given item from this linked list, or raise ValueError.
+        Best Case: O(1) for n items in the list(length)
+        Worst Case: O(n) for n items in the list(length)
+        Average Case: O(n) for n items int he list(lenghth)
+        Reason: we have to loop through every item in list"""
+
         node = self.head
         prev = None
 
         # If the linked list is empty, raise a value error
-        if not node:
+        if node is None:
             raise ValueError(f'Item not found: {item}')
 
         # While node is not None
@@ -220,7 +238,7 @@ class LinkedList(object):
                     # Set the previous nodes next to be none, and set it to the new tail
                     prev.next = None
                     self.tail = prev
-                # third caise is that the item we want to remove is somewhere in the middle
+                # this case solves that the item we want to remove is somewhere in the middle
                 else:
                     # unlink the current node
                     prev.next = node.next
@@ -234,6 +252,11 @@ class LinkedList(object):
                 node = node.next
 
     def replace(self, item):
+        """ Replace a given item
+            Average case running time: O(n) for n items in the list(length)
+            Best case running time: O(1) for n items in the list(length)
+            Worst case running time: O(n) for n items in the list(length)
+            Reason: we have to loop through every item in list"""
         # find the item in the list return value error otherwise
         count = 0
         node = self.head
@@ -245,7 +268,11 @@ class LinkedList(object):
             return None
 
     def find(self, quality):
-        """Return an item from this linked list satisfying the given quality."""
+        """Return an item from this linked list satisfying the given quality.
+            Average case running time: O(n) for n items in the list(length)
+            Best case running time: O(1) for n items in the list(length)
+            Worst case running time: O(n) for n items in the list(length)
+            Reason: we have to loop through every item in list"""
         # Base case
         node = self.head
 
