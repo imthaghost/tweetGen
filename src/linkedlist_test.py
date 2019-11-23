@@ -124,6 +124,16 @@ class LinkedListTest(unittest.TestCase):
         assert ll.head.data == 'A'  # Unchanged
         assert ll.tail.data == 'C'  # New tail
 
+    def test_append_2_items(self):
+        ll = LinkedList()
+        # Append should always update tail node
+        ll.append('A')
+        assert ll.head.data == 'A'  # New head
+        assert ll.tail.data == 'A'  # New tail
+        ll.append('B')
+        assert ll.head.data == 'A'  # Unchanged
+        assert ll.tail.data == 'B'  # New tail
+
     def test_prepend(self):
         ll = LinkedList()
         # Prepend should always update head node
@@ -137,12 +147,28 @@ class LinkedListTest(unittest.TestCase):
         assert ll.head.data == 'A'  # New head
         assert ll.tail.data == 'C'  # Unchanged
 
+    def test_prepend_2_items(self):
+        ll = LinkedList()
+        # Prepend should always update head node
+        ll.prepend('C')
+        assert ll.head.data == 'C'  # New head
+        assert ll.tail.data == 'C'  # New head
+        ll.prepend('B')
+        assert ll.head.data == 'B'  # New head
+        assert ll.tail.data == 'C'  # Unchanged
+
     def test_find(self):
         ll = LinkedList(['A', 'B', 'C'])
         assert ll.find(lambda item: item == 'B') == 'B'  # Match equality
         assert ll.find(lambda item: item < 'B') == 'A'  # Match less than
         assert ll.find(lambda item: item > 'B') == 'C'  # Match greater than
         assert ll.find(lambda item: item == 'X') is None  # No matching item
+
+    def test_find_empty_ll(self):
+        """Check to see if empty Linked list find method returns None"""
+        ll = LinkedList([])
+        item = 'A'
+        assert ll.find(item) is None
 
     def test_delete_with_3_items(self):
         ll = LinkedList(['A', 'B', 'C'])
@@ -190,6 +216,23 @@ class LinkedListTest(unittest.TestCase):
         # Delete should raise error if item not found
         with self.assertRaises(ValueError):
             ll.delete('X')  # Item not found in list
+
+    def test_detele_with_10_items(self):
+        ll = LinkedList(['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J'])
+        assert ll.head.data == 'A'  # First item
+        assert ll.tail.data == 'J'  # Last item
+        ll.delete('A')
+        assert ll.head.data == 'B'  # New head
+        assert ll.tail.data == 'J'  # Unchanged
+        ll.delete('E')
+        assert ll.head.data == 'B'  # Unchanged
+        assert ll.tail.data == 'J'  # Unchanged
+        ll.delete('C')
+        assert ll.head.data == 'B'  # Unchanged
+        assert ll.tail.data == 'J'  # Unchanged
+        ll.delete('D')
+        assert ll.head.data == 'B'  # Unchanged
+        assert ll.tail.data == 'J'  # New tail
 
 
 if __name__ == '__main__':

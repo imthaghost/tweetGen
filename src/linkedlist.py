@@ -218,10 +218,6 @@ class LinkedList(object):
         node = self.head
         prev = None
 
-        # If the linked list is empty, raise a value error
-        if node is None:
-            raise ValueError(f'Item not found: {item}')
-
         # While node is not None
         while node:
             # Check if the node's data is what we are looking for
@@ -250,6 +246,8 @@ class LinkedList(object):
                 # node has not been found set so update temp values
                 prev = node
                 node = node.next
+        # we raise a value error otehrwise
+        raise ValueError(f'Item not found: {item}')
 
     def replace(self, item):
         """ Replace a given item
