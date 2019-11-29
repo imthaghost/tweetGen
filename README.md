@@ -65,7 +65,7 @@ pipenv install
 python3 app.py
 ```
 
-This also assumes that you have `brew` installed. After cloning the repository in desired directory we run the command `pipenv shell` to initialize and activate our virtual enviornment. Unless specified pipenv will default to whatever virtualenv defaults to. We then allow pipenv to find and install the necessary modules for our server. All modules can be viewed inside the file `Pipfile` under the [packages] section. We then start running the server on port 8080.
+> This also assumes that you have `brew` installed. After cloning the repository in desired directory we run the command `pipenv shell` to initialize and activate our virtual enviornment. Unless specified pipenv will default to whatever virtualenv defaults to. We then allow pipenv to find and install the necessary modules for our server. All modules can be viewed inside the file `Pipfile` under the [packages] section. We then start running the server on port 8080.
 
 ## How to contribute
 
@@ -77,9 +77,9 @@ or whatever modifications you've made to the project, issue a pull request to th
 -   [Flask Micro-Framework](http://flask.palletsprojects.com/en/1.1.x/) - The web framework used
 -   [Wordcloud](https://pypi.org/project/wordcloud/) - Dependency
 
-## Authors
+## Contributors
 
--   **Gary Frederick** - _Initial work_ - [imthaghost](https://github.com/imthaghost)
+-   **Gary Frederick** - _Author_ - [imthaghost](https://github.com/imthaghost)
 
 See also the list of [contributors](https://github.com/imthaghost/tweetGen/contributors) who participated in this project.
 
