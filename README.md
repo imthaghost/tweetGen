@@ -1,14 +1,31 @@
+<h1 align="center">Welcome to tweetGen</h1>
 <a href="https://www.google.com/search?q=twitter+icon&source=lnms&tbm=isch&sa=X&ved=0ahUKEwingJCUgvPlAhWYsp4KHWpXBVYQ_AUIEigB&biw=1440&bih=788#imgrc=4-NyAF10t5J6BM:"><img src="/static/img/icon.png" title="Twitter Icon"></a>
+<p>
+    <a href="https://www.npmjs.com/package/readme-md-generator">
+    <img alt="downloads" src="https://img.shields.io/github/contributors/imthaghost/ghostChat?color=green" target="_blank" />
 
-Markov Chain Tweet generator
+  </a> 
+  
+  <img alt="Version" src="https://img.shields.io/badge/version-1.0-blue.svg?cacheSeconds=2592000" />
+  <a href="#" target="_blank">
+    <img alt="License: MIT" src="https://img.shields.io/badge/License-MIT-yellow.svg" />
+  </a>
+   <a href="https://github.com/imthaghost/gitmoji-changelog">
+    <img src="https://img.shields.io/badge/changelog-gitmoji-brightgreen.svg" alt="gitmoji-changelog">
+  </a>
+  <a href="https://www.npmjs.com/package/readme-md-generator">
+    <img alt="downloads" src="https://img.shields.io/npm/dm/readme-md-generator.svg?color=blue" target="_blank" />
+  </a>
+  
+</p>
 
-## Description
+> tweetGen generates tweets from any given corpus. The sentences are calculated via a stochastic model describing a sequence of possible events in which the probability of each event depends only on the state attained in the previous event (Markov Chain).
 
-tweetGen generates tweets from any given corpus. The sentences are calculated via a stochastic model describing a sequence of possible events in which the probability of each event depends only on the state attained in the previous event (Markov Chain).
+> The live version can be found at http://24.6.36.157:8008
 
 ![Word Generation](/static/img/gen.gif)
 
-### Prerequisites
+### 💻 Prerequisites
 
 What things you need to install the software and how to install them
 
@@ -17,7 +34,7 @@ What things you need to install the software and how to install them
 - python 3.4+
 ```
 
-## Getting Started
+## 🚀 Getting Started
 
 The python modules were configured in a virtual enviornment with `pipenv`:
 
