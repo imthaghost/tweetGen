@@ -50,6 +50,8 @@ pipenv install
 python3 app.py
 ```
 
+> This also assumes that you have `brew` installed. After cloning the repository in desired directory we run the command `pipenv shell` to initialize and activate our virtual enviornment. Unless specified pipenv will default to whatever virtualenv defaults to. We then allow pipenv to find and install the necessary modules for our server. All modules can be viewed inside the file `Pipfile` under the [packages] section. We then start running the server on port 8080.
+
 #### apt systems Ubuntu, Debian, Mint, Etc
 
 ```bash
@@ -64,8 +66,6 @@ pipenv install
 # start flask server
 python3 app.py
 ```
-
-> This also assumes that you have `brew` installed. After cloning the repository in desired directory we run the command `pipenv shell` to initialize and activate our virtual enviornment. Unless specified pipenv will default to whatever virtualenv defaults to. We then allow pipenv to find and install the necessary modules for our server. All modules can be viewed inside the file `Pipfile` under the [packages] section. We then start running the server on port 8080.
 
 ## How to contribute
 
