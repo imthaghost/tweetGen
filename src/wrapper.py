@@ -1,3 +1,6 @@
+import time
+
+
 def time_it(func):
     """
 
