@@ -267,7 +267,7 @@ class LinkedList(object):
         # we raise a value error otehrwise
         raise ValueError(f'Item not found: {item}')
 
-    def replace(self, item):
+    def replace(self, item, new_item):
         """ Replace a given item in the linked list
 
             Time Complexity
@@ -276,13 +276,14 @@ class LinkedList(object):
                 Best case running time: O(1) for n items in the list(length)
                 Worst case running time: O(n) for n items in the list(length)
                 Reason: we have to loop through every item in list"""
-        # find the item in the list return value error otherwise
-        if self.find(item):
-            data = self.find(item)
-            data.data = item
-        # if list is empty return None
-        if not self.head:
-            return None
+        node = self.head
+
+        while node:
+            if node.data == item:
+                node.data = new_item
+                return
+
+            node = node.next
 
     def find(self, quality):
         """Return an item from this linked list satisfying the given quality.
