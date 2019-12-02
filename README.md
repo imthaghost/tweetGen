@@ -27,7 +27,7 @@
 What things you need to install the software and how to install them
 
 ```bash
-- brew
+
 - python 3.4+
 ```
 
