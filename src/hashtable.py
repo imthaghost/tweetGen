@@ -61,43 +61,21 @@ class HashTable(object):
         for bucket in self.buckets:
             for item in bucket.items():
                 yield item
+    
+    def __len__(self):
+        """Returns the length of the table"""
+        return self.length()
 
     @benchmark
     def _bucket_index(self, key):
         """Return the bucket index where the given key would be stored."""
-        # Calculate the given key's hash code and transform into bucket index
         return hash(key) % len(self.buckets)
-
-    # def find(self, key):
-    #     """Search for a given item within the table"""
-    #     """ Time Complexity
-    #         ---------------
-    #             Best Case: O()
-    #             Average Case: Θ()
-    #             Worst Case: Ω()
-    #     """
-    #     hash_key = hash(key) % self.size
-    #     bucket = self[hash_key]
-    #     for i, kv in enumerate(bucket):
-    #         k, v = kv
-    #         if key == k:
-    #             return v
 
     @benchmark
     def find(self, key):
-        """Return item and bucket for a given key.
-        Params:
-            key: object - the key you want to get the item from
-
-        Returns:
-            item, bucket:
-                Item: The item that was requested, None if not found
-                Bucket: The bucket that the item was searched for in (linked list)
-        """
-        # get the bucket index for the given key
-        bucket_index = self._bucket_index(key)
-        # get the bucket (linked list) with the bucket index we just got
-        bucket = self.buckets[bucket_index]
+        """Return item and bucket for a given key."""
+        index = self._bucket_index(key)
+        bucket = self.buckets[index]
         # find the item from the given key
         item = bucket.find(lambda item: item[0] == key)
         # return the item, bucket
@@ -109,12 +87,11 @@ class HashTable(object):
         """ 
             Time Complexity
             ---------------
-                Best Case: O(1)
-                Average Case: Θ(n)
-                Worst Case: Ω(n)
+                Best Case: O(1)Searching for first key
+                Average Case: Θ(n) Every bucket only has 1 item
+                Worst Case: Ω(n) We loop through every bucket, and then every item in each bucket
         """
         for bucket in self.buckets:
-            # append each key that is in each item (linked list) in the bucket
             for key, value in bucket.items():
                 yield key
 
@@ -135,16 +112,16 @@ class HashTable(object):
             for key, value in bucket.items():
                 values.append(value)
 
-        return values
+        return values # return all values
 
     @benchmark
     def items(self):
         """Return a list of all items (key-value pairs) in this hash table."""
         """ Time Complexity
             ---------------
-                Best Case: O()
-                Average Case: Θ()
-                Worst Case: Ω()
+                Best Case: O(1) Only searching for first bucket
+                Average Case: Θ(n) Every bucket only has 1 item
+                Worst Case: Ω(n) Every bucket has multiple items
         """
         items = []
         for bucket in self.buckets:
@@ -156,9 +133,9 @@ class HashTable(object):
         """Return the number of key-value entries by traversing its buckets."""
         """ Time Complexity
             ---------------
-                Best Case: O(1) A return statment is instinta
+                Best Case: O(1) A return statment is constant
                 Average Case: Θ(1) We calculate length in our set and delete functions
-                Worst Case: Ω(1)
+                Worst Case: Ω(1) A return statment is constant
         """
         return self.size
 
@@ -174,7 +151,7 @@ class HashTable(object):
         # get item and bucket
         item, bucket = self.find(key)
 
-        # if item is not None
+        # if item is found return true otherwiese false
         if item:
             return True
         return False
@@ -184,13 +161,11 @@ class HashTable(object):
         """Return the value associated with the given key, or raise KeyError."""
         """ Time Complexity
             ---------------
-                Best Case: O()
-                Average Case: Θ()
-                Worst Case: Ω()
+                Best Case: O(1) only need to check 1 operation
+                Average Case: Θ(1) each bucket only has 1 item
+                Worst Case: Ω(n) if there are too many items hashed in a single bucket.
         """
-        # get item and bucket
         item, bucket = self.find(key)
-
         # if item exists return the value associated with the key. otherwise raise KeyError if item was not found
         if item:
             return item[1]
@@ -202,9 +177,9 @@ class HashTable(object):
         """Insert or update the given key with its associated value."""
         """ Time Complexity
             ---------------
-                Best Case: O()
-                Average Case: Θ()
-                Worst Case: Ω()
+                Best Case: O(1) only need to check 1 operation
+                Average Case: Θ(1) each bucket only has 1 item
+                Worst Case: Ω(n) if there are too many items hashed in a single bucket.
         """
         # get the item and the bucket
         item, bucket = self.find(key)
@@ -221,15 +196,11 @@ class HashTable(object):
         """Delete the given key from this hash table, or raise KeyError."""
         """ Time Complexity
             ---------------
-                Best Case: O()
-                Average Case: Θ()
-                Worst Case: Ω()
+                Best Case: O(1) the item we are deleting is the first
+                Average Case: Θ(1) every bucket only has 1 item
+                Worst Case: Ω(n) if there are too many items hashed in a single bucket.
         """
-        # get the item and the bucket
         item, bucket = self.find(key)
-        # grab the bucket and item
-        bucket, item = self.get
-
         # if item exists, delete it. otherwise raise KeyError that item was not found
         if item:
             bucket.delete(item)
