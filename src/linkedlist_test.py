@@ -1,6 +1,6 @@
 #!python
 
-from src.linkedlist import LinkedList, Node
+from linkedlist import LinkedList, Node
 import unittest
 
 
@@ -233,6 +233,13 @@ class LinkedListTest(unittest.TestCase):
         ll.delete('D')
         assert ll.head.data == 'B'  # Unchanged
         assert ll.tail.data == 'J'  # New tail
+    
+    def test_length_after_replace(self):
+        ll = LinkedList(['A', 'B', 'C'])
+        assert ll.length() == 3
+        # length should stay the same
+        ll.replace('B', 'D')
+        assert ll.length() == 3
 
 
 if __name__ == '__main__':
