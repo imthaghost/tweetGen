@@ -233,7 +233,7 @@ class HashTable(object):
 
 #     def _hash_str(self, string):
 #         """Return a hash of the given string. hash_str uses the djb2 algorithm to compute
-#         the hash value of a string http://www.cse.yorku.ca/~oz/hash.html"""
+#         the hash value of a string"""
 #         hash = 5381
 #         for char in string[1:]:
 #             # (hash << 5) + hash is equivalent to hash * 33
@@ -406,9 +406,9 @@ class HashTable(object):
 #         for key, value in items:
 #             self.set(key, value)
 ################ My implementation ##################
+
+
 ################# Alan's tests ####################
-
-
 def test_hash_table():
     ht = HashTable()
     print('hash table: {}'.format(ht))
@@ -438,9 +438,8 @@ def test_hash_table():
 
         print('contains(X): {}'.format(ht.contains('X')))
         print('length: {}'.format(ht.length()))
-
-
 ################# Alan's tests ####################
+
 
 if __name__ == '__main__':
     test_hash_table()
