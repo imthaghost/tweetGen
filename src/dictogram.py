@@ -5,7 +5,6 @@ import time
 import logging
 from decimal import *
 from src.wrapper import time_it
-from threading import Threads
 from multiprocessing import Process
 from random import random, choice, uniform, randint
 
