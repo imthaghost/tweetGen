@@ -13,7 +13,7 @@
 
     <!-- Bootstrap core CSS -->
     <link href="static/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
-
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.5.0/themes/prism.min.css" />
     <!-- Custom fonts -->
     <link href="vendor/fontawesome-free/css/all.min.css" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css?family=Varela+Round" rel="stylesheet">
@@ -31,8 +31,8 @@
     <!-- Navigation -->
     <nav class="navbar navbar-expand-lg navbar-light fixed-top" id="mainNav">
         <div class="container">
-            <a class="navbar-brand js-scroll-trigger" href="#page-top">Tweet Gen</a>
-
+            <a class="navbar-brand js-scroll-trigger" href="{{url_for('index')}}">Tweet Gen</a>
+            <a class="navbar-brand js-scroll-trigger topcorner" href="{{url_for('quote_page')}}">Quotes</a>
             <div class="collapse navbar-collapse" id="navbarResponsive">
                 <ul class="navbar-nav ml-auto">
 
@@ -46,96 +46,20 @@
         <div class="container d-flex h-100 align-items-center">
             <div class="mx-auto text-center">
                 <h1 class="mx-auto my-0 text-uppercase">TweetGen</h1>
-                <h2 class="text-white-50 mx-auto mt-2 mb-5">If this is working that means my dog hasn't chewed on the
-                    ethernet cable yet..</h2>
-                <button id="generate" class="btn btn-primary js-scroll-trigger">Generate</button>
+
+                <h2 class="text-white-50 mx-auto mt-2 mb-5">Please read instructions</h2>
+
+
                 <form>
                     <input id='count' placeholder="Enter ammount" value="10" class="mx-auto mt-2 mb-5"></input>
                 </form>
+                <button id="generate" class="btn btn-primary js-scroll-trigger">Tweet</button>
+                <button class="btn btn-primary js-scroll-trigger">Upload File</button>
                 <p id="holder" class="text-white-50 mx-auto mt-2 mb-5">{{sentence}}</p>
                 <!-- <img id="cloud" src="/static/img/better.png"> -->
             </div>
         </div>
     </header>
-
-
-
-    <!-- 
-    <section id="signup" class="signup-section">
-        <div class="container">
-            <div class="row">
-                <div class="col-md-10 col-lg-8 mx-auto text-center">
-
-                    <i class="far fa-paper-plane fa-2x mb-2 text-white"></i>
-                    <h2 class="text-white mb-5">Subscribe to receive updates!</h2>
-
-                    <form class="form-inline d-flex">
-                        <input type="email" class="form-control flex-fill mr-0 mr-sm-2 mb-3 mb-sm-0" id="inputEmail" placeholder="Enter email address...">
-                        <button type="submit" class="btn btn-primary mx-auto">Subscribe</button>
-                    </form>
-
-                </div>
-            </div>
-        </div>
-    </section> -->
-
-    <!-- Contact Section -->
-    <!-- <section class="contact-section bg-black">
-        <div class="container">
-
-            <div class="row">
-
-                <div class="col-md-4 mb-3 mb-md-0">
-                    <div class="card py-4 h-100">
-                        <div class="card-body text-center">
-                            <i class="fas fa-map-marked-alt text-primary mb-2"></i>
-                            <h4 class="text-uppercase m-0">Address</h4>
-                            <hr class="my-4">
-                            <div class="small text-black-50">4923 Market Street, Orlando FL</div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="col-md-4 mb-3 mb-md-0">
-                    <div class="card py-4 h-100">
-                        <div class="card-body text-center">
-                            <i class="fas fa-envelope text-primary mb-2"></i>
-                            <h4 class="text-uppercase m-0">Email</h4>
-                            <hr class="my-4">
-                            <div class="small text-black-50">
-                                <a href="#">hello@yourdomain.com</a>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="col-md-4 mb-3 mb-md-0">
-                    <div class="card py-4 h-100">
-                        <div class="card-body text-center">
-                            <i class="fas fa-mobile-alt text-primary mb-2"></i>
-                            <h4 class="text-uppercase m-0">Phone</h4>
-                            <hr class="my-4">
-                            <div class="small text-black-50">+1 (555) 902-8832</div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="social d-flex justify-content-center">
-                <a href="#" class="mx-2">
-                    <i class="fab fa-twitter"></i>
-                </a>
-                <a href="#" class="mx-2">
-                    <i class="fab fa-facebook-f"></i>
-                </a>
-                <a href="#" class="mx-2">
-                    <i class="fab fa-github"></i>
-                </a>
-            </div>
-
-        </div>
-    </section> -->
-
     <!-- Footer -->
     <footer class="bg-black small text-center text-white-50">
         <div class="container">
@@ -149,7 +73,7 @@
 
     <!-- Plugin JavaScript -->
     <script src="static/vendor/jquery-easing/jquery.easing.min.js"></script>
-
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.5.0/prism.min.js"></script>
     <!-- Custom scripts -->
     <script src="static/js/grayscale.min.js"></script>
 

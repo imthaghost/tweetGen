@@ -307,3 +307,10 @@ input.valid,
 textarea.valid {
     border: 2px solid green;
 }
+
+.topcorner{
+   position:absolute;
+   top:0;
+   right:0;
+  }
+
