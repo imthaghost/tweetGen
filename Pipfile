@@ -15,7 +15,10 @@ pandas = "*"
 matplotlib = "*"
 pillow = "*"
 wordcloud = "*"
-python-twitter = "*"
+tweepy = "*"
+redis = "*"
+quote = "*"
+markovify = "*"
 
 [requires]
 python_version = "3.7"
