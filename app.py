@@ -10,6 +10,7 @@ from multiprocessing import Process, Manager, Pool
 # Enternal Python Modules
 import numpy as np
 import pandas as pd
+import tweepy
 from PIL import Image
 from wordcloud import WordCloud, STOPWORDS, ImageColorGenerator
 from flask import Flask, render_template, redirect, url_for, request, jsonify
@@ -58,8 +59,19 @@ def transform_format(val):
 
 
 def tweet(sentence):
-    # tweet functionality
-    pass
+    """Just a tweet function"""
+    # funciton that just updates twitter status 'tweet'
+    consumer_key = 'yagga'        # consumer key
+    consumer_secret = 'blank'       # consumer secret
+    access_token = 'yah'            # access token
+    token_secret = 'yagga'          # token secret
+    # Oauth Handler
+    auth = tweepy.OAuthHandler(consumer_key, consumer_secret)
+    auth.set_access_token(access_token, access_token_secret)
+    # authenticate
+    api = tweepy.API(auth)
+    # TWEET TWEET!
+    api.update_status(status=sentence)
 
 
 @app.route('/', methods=['GET'])
@@ -80,6 +92,7 @@ def index():
     # generate a courpus
     # use the master histogram not the alias table
     master = generation('./corpus/thus.txt')
+##################### Word Cloud Generation #########################
     # this will be the outline of our wordlcoud image
     # outline = np.array(Image.open("./static/img/bird.png"))
     # convert image rgb bytes to an array
@@ -113,8 +126,26 @@ def index():
     # img.putdata(newData)
     # save our new image as png
     # img.save("./static/img/better.png", "PNG")
+################# Word Cloud Generation #########################
+
     # render the index page
     return render_template('index.html')
+
+
+@app.route('/quote_page', methods=['GET'])
+def quote_page():
+    """ root/index route
+    @GET:
+        summary: index endpoint will render file 'index.html'
+        description: Get
+        responses:
+            200:
+                description: index.html returned
+                schema: indexSchema
+            404:
+                description: index not found.
+    """
+    return render_template('quotes.html')
 
 
 @app.route('/generate', methods=['POST'])
@@ -142,6 +173,12 @@ def generate():
         sample = vose.sample_n(size=num)
         sentence = ' '.join(sample).capitalize() + '.'
         return jsonify({'sentence': sentence})
+
+
+@app.route('/quote', methods=['POST'])
+def quote():
+    # comming soon
+    pass
 
 
 if __name__ == "__main__":
