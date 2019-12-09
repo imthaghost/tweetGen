@@ -211,200 +211,202 @@ class HashTable(object):
 ###################### The way Alan wants our hashtables #####################
 
 ###################### My implementation ##########################
-# class HashTable(object):
 
-#     def __init__(self, items=None):
-#         """Initialize this HashTable and set items if specified"""
 
-#         self.buckets = [LinkedList() for i in range(8)]  # start with 8 slots
-#         self.size = 0
+class Hash_Table(object):
 
-#     def __len__(self):
-#         """Returns the length of the table"""
-#         return self.length()
+    def __init__(self, items=None):
+        """Initialize this HashTable and set items if specified"""
 
-#     def _get_hash_index(self, key):
-#         """Return a hash index by hashing the key and finding the remainder of the hash
-#         divided by the number of slots in the HashTable"""
+        self.buckets = [LinkedList() for i in range(8)]  # start with 8 slots
+        self.size = 0
 
-#         # knowing that the number of buckets will always be a power of 2
-#         # we can use bitwise AND `hash & l-1` instead of modulo
-#         return self._hash_str(key) & (len(self.buckets)-1)
+    def __len__(self):
+        """Returns the length of the table"""
+        return self.length()
 
-#     def _hash_str(self, string):
-#         """Return a hash of the given string. hash_str uses the djb2 algorithm to compute
-#         the hash value of a string"""
-#         hash = 5381
-#         for char in string[1:]:
-#             # (hash << 5) + hash is equivalent to hash * 33
-#             hash = (hash << 5) + hash + ord(char)
-#         return hash
+    def _get_hash_index(self, key):
+        """Return a hash index by hashing the key and finding the remainder of the hash
+        divided by the number of slots in the HashTable"""
 
-#     def items(self):
-#         """Return a list of all items (key-value pairs) in this hash table."""
-#         """ Time Complexity
-#             ---------------
-#                 Best Case: O(1) Only searching for first bucket
-#                 Average Case: Θ(n) Every bucket only has 1 item
-#                 Worst Case: Ω(n) Every bucket has multiple items
-#         """
-#         items = []
-#         for bucket in self.buckets:
-#             items.extend(bucket.items())
-#         return items
+        # knowing that the number of buckets will always be a power of 2
+        # we can use bitwise AND `hash & l-1` instead of modulo
+        return self._hash_str(key) & (len(self.buckets)-1)
 
-#     def get_items(self):
-#         """Return a list of tuples representing all the items in the HashTable"""
-#         return [items.extend(slot.items()) for slot in self.buckets]
+    def _hash_str(self, string):
+        """Return a hash of the given string. hash_str uses the djb2 algorithm to compute
+        the hash value of a string"""
+        hash = 5381
+        for char in string[1:]:
+            # (hash << 5) + hash is equivalent to hash * 33
+            hash = (hash << 5) + hash + ord(char)
+        return hash
 
-#     def keys(self):
-#         """Return a list of all keys in this hash table."""
-#         """
-#             Time Complexity
-#             ---------------
-#                 Best Case: O(1)Searching for first key
-#                 Average Case: Θ(n) Every bucket only has 1 item
-#                 Worst Case: Ω(n) We loop through every bucket, and then every item in each bucket
-#         """
-#         for bucket in self.buckets:
-#             for key, value in bucket.items():
-#                 yield key
+    def items(self):
+        """Return a list of all items (key-value pairs) in this hash table."""
+        """ Time Complexity
+            ---------------
+                Best Case: O(1) Only searching for first bucket
+                Average Case: Θ(n) Every bucket only has 1 item
+                Worst Case: Ω(n) Every bucket has multiple items
+        """
+        items = []
+        for bucket in self.buckets:
+            items.extend(bucket.items())
+        return items
 
-#     def contains(self, key):
-#         """Return True if the key is found in the HashTable,
-#         otherwise return False"""
-#         """ Time Complexity
-#                     ---------------
-#                         Best Case: O(1) A return statment is constant
-#                         Average Case: Θ(1) We calculate length in our set and delete functions
-#                         Worst Case: Ω(1) A return statment is constant
-#                 """
+    def get_items(self):
+        """Return a list of tuples representing all the items in the HashTable"""
+        return [items.extend(slot.items()) for slot in self.buckets]
 
-#         # get the slot (linked_list) the key belongs to
-#         # using our _get_hash_index function
-#         slot = self.buckets[self._get_hash_index(key)]
+    def keys(self):
+        """Return a list of all keys in this hash table."""
+        """
+            Time Complexity
+            ---------------
+                Best Case: O(1)Searching for first key
+                Average Case: Θ(n) Every bucket only has 1 item
+                Worst Case: Ω(n) We loop through every bucket, and then every item in each bucket
+        """
+        for bucket in self.buckets:
+            for key, value in bucket.items():
+                yield key
 
-#         # look for key in linked list
-#         # if found return True, otherwise return False
-#         if slot.find_by_key(key) is not None:
-#             return True
-#         else:
-#             return False
+    def contains(self, key):
+        """Return True if the key is found in the HashTable,
+        otherwise return False"""
+        """ Time Complexity
+                    ---------------
+                        Best Case: O(1) A return statment is constant
+                        Average Case: Θ(1) We calculate length in our set and delete functions
+                        Worst Case: Ω(1) A return statment is constant
+                """
 
-#     def values(self):
-#         """Return a list of all values in this hash table."""
-#         """ Time Complexity
-#             ---------------
-#                 Best Case: O(1)
-#                 Average Case: Θ(n)
-#                 Worst Case: Ω(n)
-#         """
-#         # initialize an empty list of all the values
-#         values = []
-#         # loop through all de buckets
-#         for bucket in self.buckets:
-#             # append each value to a bucket
-#             for key, value in bucket.items():
-#                 values.append(value)
+        # get the slot (linked_list) the key belongs to
+        # using our _get_hash_index function
+        slot = self.buckets[self._get_hash_index(key)]
 
-#         return values  # return all values
+        # look for key in linked list
+        # if found return True, otherwise return False
+        if slot.find_by_key(key) is not None:
+            return True
+        else:
+            return False
 
-#     def get(self, key):
-#         """Return data found by given key in the HashTable,
-#         return None if key is not found"""
-#         """         Time Complexity
-#                     ---------------
-#                         Best Case: O(1)
-#                         Average Case: Θ(1)
-#                         Worst Case: Ω(1)
-#                 """
-#         # get the slot (linked_list) the key belongs to
-#         # using our _get_hash_index function
-#         slot = self.buckets[self._get_hash_index(key)]
+    def values(self):
+        """Return a list of all values in this hash table."""
+        """ Time Complexity
+            ---------------
+                Best Case: O(1)
+                Average Case: Θ(n)
+                Worst Case: Ω(n)
+        """
+        # initialize an empty list of all the values
+        values = []
+        # loop through all de buckets
+        for bucket in self.buckets:
+            # append each value to a bucket
+            for key, value in bucket.items():
+                values.append(value)
 
-#         # find key in linked list and return
-#         if slot.get(key):
-#             return slot.get(key)
-#         else:
-#             raise KeyError
+        return values  # return all values
 
-#     def length(self):
-#         """Return the number of key-value entries by traversing its buckets."""
-#         """ Time Complexity
-#                     ---------------
-#                         Best Case: O(1)
-#                         Average Case: Θ(1)
-#                         Worst Case: Ω(1)
-#                 """
-#         return self.size
+    def get(self, key):
+        """Return data found by given key in the HashTable,
+        return None if key is not found"""
+        """         Time Complexity
+                    ---------------
+                        Best Case: O(1)
+                        Average Case: Θ(1)
+                        Worst Case: Ω(1)
+                """
+        # get the slot (linked_list) the key belongs to
+        # using our _get_hash_index function
+        slot = self.buckets[self._get_hash_index(key)]
 
-#     def set(self, key, value):
-#         """Add an item to the HashTable by key and value"""
-#         """ Time Complexity
-#                     ---------------
-#                         Best Case: O(1)
-#                         Average Case: Θ(1)
-#                         Worst Case: Ω(1)
-#                 """
+        # find key in linked list and return
+        if slot.get(key):
+            return slot.get(key)
+        else:
+            raise KeyError
 
-#         # get the slot (linked_list) the key belongs to
-#         # using our _get_hash_index function
-#         slot = self.buckets[self._get_hash_index(key)]
+    def length(self):
+        """Return the number of key-value entries by traversing its buckets."""
+        """ Time Complexity
+                    ---------------
+                        Best Case: O(1)
+                        Average Case: Θ(1)
+                        Worst Case: Ω(1)
+                """
+        return self.size
 
-#         # if the item isn't already in the hash table,
-#         # increment size (delete item if it is)
-#         if not slot.delete(key):
-#             self.size += 1
+    def set(self, key, value):
+        """Add an item to the HashTable by key and value"""
+        """ Time Complexity
+                    ---------------
+                        Best Case: O(1)
+                        Average Case: Θ(1)
+                        Worst Case: Ω(1)
+                """
 
-#         # append item to end of slot (linked list)
-#         slot.append((key, value))
+        # get the slot (linked_list) the key belongs to
+        # using our _get_hash_index function
+        slot = self.buckets[self._get_hash_index(key)]
 
-#         # if load factor exceeds 0.66, resize
-#         if (self.size / len(self.buckets)) > 0.66:
-#             self._resize()
+        # if the item isn't already in the hash table,
+        # increment size (delete item if it is)
+        if not slot.delete(key):
+            self.size += 1
 
-#     def delete(self, key):
-#         """Remove an item from the HashTable by key or raise KeyError if key
-#         is not found in the HashTable"""
-#         """
-#                 Time Complexity
-#                 ---------------
-#                     Best Case: O(1)
-#                     Average Case: Θ(1)
-#                     Worst Case: Ω(1)
-#                 """
+        # append item to end of slot (linked list)
+        slot.append((key, value))
 
-#         # get the slot (linked_list) the key belongs to
-#         # using our _get_hash_index function
-#         slot = self.buckets[self._get_hash_index(key)]
+        # if load factor exceeds 0.66, resize
+        if (self.size / len(self.buckets)) > 0.66:
+            self._resize()
 
-#         # delete item or throw key error if item was not found
-#         if slot.delete(key):
-#             self.size -= 1
-#         else:
-#             raise KeyError('Key {} not found in HashTable'.format(key))
+    def delete(self, key):
+        """Remove an item from the HashTable by key or raise KeyError if key
+        is not found in the HashTable"""
+        """
+                Time Complexity
+                ---------------
+                    Best Case: O(1)
+                    Average Case: Θ(1)
+                    Worst Case: Ω(1)
+                """
 
-#     def _resize(self):
-#         """"Resize the HashTable by doubling the number of slots and rehashing all items"""
-#         """         Time Complexity
-#                     ---------------
-#                         Best Case: O(1)
-#                         Average Case: Θ(1)
-#                         Worst Case: Ω(1)
-#                 """
+        # get the slot (linked_list) the key belongs to
+        # using our _get_hash_index function
+        slot = self.buckets[self._get_hash_index(key)]
 
-#         # get a list of all items in the hash table
-#         items = self.get_items()
+        # delete item or throw key error if item was not found
+        if slot.delete(key):
+            self.size -= 1
+        else:
+            raise KeyError('Key {} not found in HashTable'.format(key))
 
-#         # reset size for hash table
-#         self.size = 0
+    def _resize(self):
+        """"Resize the HashTable by doubling the number of slots and rehashing all items"""
+        """         Time Complexity
+                    ---------------
+                        Best Case: O(1)
+                        Average Case: Θ(1)
+                        Worst Case: Ω(1)
+                """
 
-#         # generate new slots of double current slots
-#         self.buckets = [LinkedList() for i in range(len(self.buckets) * 2)]
+        # get a list of all items in the hash table
+        items = self.get_items()
 
-#         # rehash each item
-#         for key, value in items:
-#             self.set(key, value)
+        # reset size for hash table
+        self.size = 0
+
+        # generate new slots of double current slots
+        self.buckets = [LinkedList() for i in range(len(self.buckets) * 2)]
+
+        # rehash each item
+        for key, value in items:
+            self.set(key, value)
 ################ My implementation ##################
 
 
