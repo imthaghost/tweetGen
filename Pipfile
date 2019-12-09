@@ -15,6 +15,7 @@ pandas = "*"
 matplotlib = "*"
 pillow = "*"
 wordcloud = "*"
+python-twitter = "*"
 
 [requires]
 python_version = "3.7"
