@@ -16,6 +16,7 @@ import tweepy
 #from wordcloud import WordCloud, STOPWORDS, ImageColorGenerator
 import markovify
 from flask import Flask, render_template, redirect, url_for, request, jsonify
+from flask.ext.uploads import UploadSet, configure_uploads, TEXT
 # Local Python Modules
 from src.chain import gen_sentence
 from src.vose import *

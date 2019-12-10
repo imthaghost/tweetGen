@@ -13,6 +13,7 @@ requests = "*"
 tweepy = "*"
 quote = "*"
 markovify = "*"
+flask-uploads = "*"
 
 [requires]
 python_version = "3.7"
