@@ -8,14 +8,16 @@ import json
 from os import path
 from multiprocessing import Process, Manager, Pool
 # Enternal Python Modules
-import numpy as np
-import pandas as pd
+#import matplotlib.pyplot as plt
+#import numpy as np
+#import pandas as pd
 import tweepy
-from PIL import Image
-from wordcloud import WordCloud, STOPWORDS, ImageColorGenerator
+#from PIL import Image
+#from wordcloud import WordCloud, STOPWORDS, ImageColorGenerator
+import markovify
 from flask import Flask, render_template, redirect, url_for, request, jsonify
 # Local Python Modules
-import matplotlib.pyplot as plt
+from src.chain import gen_sentence
 from src.vose import *
 from src.dictogram import *
 
@@ -23,39 +25,42 @@ from src.dictogram import *
 # name of application
 app = Flask(__name__)
 # generate corpus I will convert this to webcrawler later
-histogram = Dictogram(path='./corpus/thus.txt')
+#histogram = Dictogram(path='./corpus/thus.txt')
 # construct alias tables
-vose = VoseAlias(histogram)
+#vose = VoseAlias(histogram)
 
 
-def generation(file):
-    histogram = {}
-    # genration function for master historgram
-    if os.stat(file).st_size == 0:
-        raise IOError(
-            "Please provide a file containing a corpus (not an empty file).")
-    # Ensure the file is text based (not binary). This is based on the implementation
-    #  of the Linux file command
-    textchars = bytearray([7, 8, 9, 10, 12, 13, 27]) + \
-        bytearray(range(0x20, 0x100))
-    with open(file, "rb") as bin_file:
-        if bool(bin_file.read(2048).translate(None, textchars)):
-            raise IOError("Please provide a file containing text-based data.")
-    with open(file, "r") as corpus:
-        words = corpus.read().lower()
-        words_list = re.sub(r'[^a-zA-Z\s]', '', words).split()
+# def generation(file):
+#     histogram = {}
+#     # genration function for master historgram
+#     if os.stat(file).st_size == 0:
+#         raise IOError(
+#             "Please provide a file containing a corpus (not an empty file).")
+#     # Ensure the file is text based (not binary). This is based on the implementation
+#     #  of the Linux file command
+#     textchars = bytearray([7, 8, 9, 10, 12, 13, 27]) + \
+#         bytearray(range(0x20, 0x100))
+#     with open(file, "rb") as bin_file:
+#         if bool(bin_file.read(2048).translate(None, textchars)):
+#             raise IOError("Please provide a file containing text-based data.")
+#     with open(file, "r") as corpus:
+#         words = corpus.read().lower()
+#         words_list = re.sub(r'[^a-zA-Z\s]', '', words).split()
 
-    for o in words_list:  # o for outcome
-        histogram[o] = histogram.get(o, 0) + 1
-    return histogram
+#     for o in words_list:  # o for outcome
+#         histogram[o] = histogram.get(o, 0) + 1
+#     return histogram
 
 
-def transform_format(val):
-    # helper function for transforming image colors
-    if val == 0:
-        return 255
-    else:
-        return val
+# def transform_format(val):
+#     # helper function for transforming image colors
+#     if val == 0:
+#         return 255
+#     else:
+#         return val
+
+def file_upload(file):
+    pass
 
 
 def tweet(sentence):
@@ -91,7 +96,7 @@ def index():
     # master histogram
     # generate a courpus
     # use the master histogram not the alias table
-    master = generation('./corpus/thus.txt')
+    #master = generation('./corpus/thus.txt')
 ##################### Word Cloud Generation #########################
     # this will be the outline of our wordlcoud image
     # outline = np.array(Image.open("./static/img/bird.png"))
@@ -163,16 +168,22 @@ def generate():
                 description:
                     server encounted exception
     """
+
     num = request.form.get('count')
     if num == None or num == 0:
-        sample = vose.sample_n(size=10)
-        sentence = ' '.join(sample).capitalize() + '.'
-        print('sentence:' + sentence)
-        return jsonify({'sentence': sentence})
+        # default courpus is plato
+        text = gen_sentence(num=2, corpus='./corpus/plato_republic.txt')
+        body = ' '
+        body = body.join(text)
+
+        return jsonify({'sentence': body})
     else:
-        sample = vose.sample_n(size=num)
-        sentence = ' '.join(sample).capitalize() + '.'
-        return jsonify({'sentence': sentence})
+         # default courpus is plato
+        text = gen_sentence(num=int(num), corpus='./corpus/plato_republic.txt')
+        body = ' '
+        body = body.join(text)
+
+        return jsonify({'sentence': body})
 
 
 @app.route('/quote', methods=['POST'])

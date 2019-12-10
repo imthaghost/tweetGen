@@ -13,8 +13,12 @@ def get_some_quotes(query, ammount):
 
 
 if __name__ == "__main__":
-    context = quotes()
-    who = 'plato'
-    num = 900
-    context._gen(who, num)
-    print(context.quote)
+
+    who = 'zeus'
+    num = 2
+    context = get_some_quotes(who, num)
+    if not context:
+        # todo: raise NoneFound error from errors.py
+        print('No text was found on this name')
+    else:
+        print(context)

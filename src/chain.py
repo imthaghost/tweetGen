@@ -5,18 +5,21 @@ wrapper implentation of generating sentences using markovify"""
 import markovify
 
 
-if __name__ == "__main__":
+def gen_sentence(num=2, corpus='/Users/ghost/Projects/tweetGen/corpus/plato_republic.txt'):
     # Get raw text as string.
-    with open('/Users/ghost/Projects/tweetGen/corpus/plato_republic.txt') as f:
+    with open(corpus) as f:
         text = f.read()
 
     # Build the model.
     text_model = markovify.Text(text)
+    sentence = []
+    for i in range(num):
+        sentence.append(text_model.make_sentence())
 
-    # Print five randomly-generated sentences
-    for i in range(5):
-        print(text_model.make_sentence())
+    return sentence
 
-    # Print three randomly-generated sentences of no more than 280 characters
-    for i in range(3):
-        print(text_model.make_short_sentence(280))
+
+if __name__ == "__main__":
+    text = gen_sentence(num=2)
+    body = ' '
+    body = body.join(text)
