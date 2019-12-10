@@ -1,8 +1,18 @@
 """chain.py
-wrapper implentation of generating sentences using markovify"""
+wrapper implentation of generating sentences"""
 
 # External Python Modules
 import markovify
+
+# Local Python Modules
+import markovchain
+
+
+def real_gen(corpus='/Users/ghost/Projects/tweetGen/corpus/plato_republic.txt'):
+    mc = MarkovChain()
+    mc.add_file(corpus)
+    chain = ' '
+    chain.join(mc.generate_text())
 
 
 def gen_sentence(num=2, corpus='/Users/ghost/Projects/tweetGen/corpus/plato_republic.txt'):
