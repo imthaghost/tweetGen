@@ -8,12 +8,12 @@ import json
 from os import path
 from multiprocessing import Process, Manager, Pool
 # Enternal Python Modules
-#import matplotlib.pyplot as plt
-#import numpy as np
-#import pandas as pd
+# import matplotlib.pyplot as plt
+# import numpy as np
+# import pandas as pd
 import tweepy
-#from PIL import Image
-#from wordcloud import WordCloud, STOPWORDS, ImageColorGenerator
+# from PIL import Image
+# from wordcloud import WordCloud, STOPWORDS, ImageColorGenerator
 import markovify
 from flask import Flask, render_template, redirect, url_for, request, jsonify
 from flask_uploads import UploadSet, configure_uploads, TEXT
@@ -29,10 +29,10 @@ app = Flask(__name__)
 # app.config['UPLOADED_FILE_DEST'] = 'corpus/user'
 # configure_uploads(app, user_corpus)
 # generate corpus I will convert this to webcrawler later
-#histogram = Dictogram(path='./corpus/thus.txt')
+# histogram = Dictogram(path='./corpus/thus.txt')
 # construct alias tables
-#vose = VoseAlias(histogram)
-
+# vose = VoseAlias(histogram)
+returned_sentence = None
 
 # def generation(file):
 #     histogram = {}
@@ -67,7 +67,7 @@ def file_upload(file):
     pass
 
 
-def tweet(sentence):
+def send_tweet(sentence):
     """Just a tweet function"""
     # funciton that just updates twitter status 'tweet'
     consumer_key = os.getenv('key')        # consumer key
@@ -100,7 +100,7 @@ def index():
     # master histogram
     # generate a courpus
     # use the master histogram not the alias table
-    #master = generation('./corpus/thus.txt')
+    # master = generation('./corpus/thus.txt')
 ##################### Word Cloud Generation #########################
     # this will be the outline of our wordlcoud image
     # outline = np.array(Image.open("./static/img/bird.png"))
@@ -203,31 +203,35 @@ def generate():
     #     return jsonify({'sentence': body}
     # else:
     # todo otherwise use default corpus
+    global returned_sentence
     num = request.form.get('count')
     if num == None or num == 0:
         # default courpus is plato
         text = gen_sentence(num=2, corpus='./corpus/plato_republic.txt')
         body = ' '
         body = body.join(text)
-        if len(body) < 280:
-            limit = False
-            tweet(body)
-            return jsonify({'sentence': body, 'limit': limit})
-        else:
-            limit = True
-            return jsonify({'limit': limit, 'sentence': body})
+        returned_sentence = body
+        return jsonify({'sentence': body})
     else:
          # default courpus is plato
         text = gen_sentence(num=int(num), corpus='./corpus/plato_republic.txt')
         body = ' '
         body = body.join(text)
-        if len(body) < 280:
-            limit = False
-            tweet(body)
-            return jsonify({'sentence': body, 'limit': limit})
-        else:
-            limit = True
-            return jsonify({'limit': limit, 'sentence': body})
+        returned_sentence = body
+        return jsonify({'sentence': body})
+
+
+@app.route('/tweet', methods=['POST'])
+def tweet():
+    global returned_sentence
+    # if the sentence is not none and short enough to tweet
+    if returned_sentence and len(returned_sentence) < 280:
+        limit = False
+        send_tweet(returned_sentence)
+        return jsonify({'limit': limit})
+    else:
+        limit = True
+        return jsonify({'limit': limit})
 
 
 @app.route('/quote', methods=['POST'])
