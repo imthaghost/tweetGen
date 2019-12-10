@@ -20,7 +20,7 @@
 
 > The live version can be found at http://24.6.36.157:5000
 
-![Word Generation](/static/img/final.gif)
+![Word Generation](/static/img/tweeter.gif)
 
 ### 💻 Prerequisites
 

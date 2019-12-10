@@ -70,13 +70,13 @@ def file_upload(file):
 def tweet(sentence):
     """Just a tweet function"""
     # funciton that just updates twitter status 'tweet'
-    consumer_key = 'yagga'        # consumer key
-    consumer_secret = 'blank'       # consumer secret
-    access_token = 'yah'            # access token
-    token_secret = 'yagga'          # token secret
+    consumer_key = os.getenv('key')        # consumer key
+    consumer_secret = os.getenv('secret')       # consumer secret
+    access_token = os.getenv('access_token')            # access token
+    token_secret = os.getenv('token_secret')          # token secret
     # Oauth Handler
     auth = tweepy.OAuthHandler(consumer_key, consumer_secret)
-    auth.set_access_token(access_token, access_token_secret)
+    auth.set_access_token(access_token, token_secret)
     # authenticate
     api = tweepy.API(auth)
     # TWEET TWEET!
@@ -209,15 +209,25 @@ def generate():
         text = gen_sentence(num=2, corpus='./corpus/plato_republic.txt')
         body = ' '
         body = body.join(text)
-
-        return jsonify({'sentence': body})
+        if len(body) < 280:
+            limit = False
+            tweet(body)
+            return jsonify({'sentence': body, 'limit': limit})
+        else:
+            limit = True
+            return jsonify({'limit': limit, 'sentence': body})
     else:
          # default courpus is plato
         text = gen_sentence(num=int(num), corpus='./corpus/plato_republic.txt')
         body = ' '
         body = body.join(text)
-
-        return jsonify({'sentence': body})
+        if len(body) < 280:
+            limit = False
+            tweet(body)
+            return jsonify({'sentence': body, 'limit': limit})
+        else:
+            limit = True
+            return jsonify({'limit': limit, 'sentence': body})
 
 
 @app.route('/quote', methods=['POST'])
