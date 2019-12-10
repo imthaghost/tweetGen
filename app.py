@@ -209,20 +209,25 @@ def generate():
     # todo otherwise use default corpus
     global returned_sentence
     num = request.form.get('count')
-    if num == None or num == 0:
-        # default courpus is plato
-        text = gen_sentence(num=2, corpus='./corpus/plato_republic.txt')
-        body = ' '
-        body = body.join(text)
-        returned_sentence = body
-        return jsonify({'sentence': body})
+    if num.isnumeric():
+        if num == None or num == 0:
+            # default courpus is plato
+            text = gen_sentence(num=2, corpus='./corpus/plato_republic.txt')
+            body = ' '
+            body = body.join(text)
+            returned_sentence = body
+            return jsonify({'sentence': body})
+        else:
+            # default courpus is plato
+            text = gen_sentence(
+                num=int(num), corpus='./corpus/plato_republic.txt')
+            body = ' '
+            body = body.join(text)
+            returned_sentence = body
+            return jsonify({'sentence': body})
     else:
-         # default courpus is plato
-        text = gen_sentence(num=int(num), corpus='./corpus/plato_republic.txt')
-        body = ' '
-        body = body.join(text)
-        returned_sentence = body
-        return jsonify({'sentence': body})
+        invalid_text = True
+        return jsonify({'word': invalid_text})
 
 
 @app.route('/tweet', methods=['POST'])
