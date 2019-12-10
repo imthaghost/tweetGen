@@ -5,11 +5,11 @@ wrapper implentation of generating sentences"""
 import markovify
 
 # Local Python Modules
-import markovchain
+from src import markovchain
 
 
 def real_gen(corpus='/Users/ghost/Projects/tweetGen/corpus/plato_republic.txt'):
-    mc = MarkovChain()
+    mc = markovchain.MarkovChain()
     mc.add_file(corpus)
     chain = ' '
     chain.join(mc.generate_text())
