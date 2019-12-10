@@ -14,11 +14,10 @@ from multiprocessing import Process, Manager, Pool
 import tweepy
 # from PIL import Image
 # from wordcloud import WordCloud, STOPWORDS, ImageColorGenerator
-import markovify
 from flask import Flask, render_template, redirect, url_for, request, jsonify
 from flask_uploads import UploadSet, configure_uploads, TEXT
 # Local Python Modules
-from src.chain import gen_sentence
+from src.chain import gen_sentence, real_gen
 from src.vose import *
 from src.dictogram import *
 
@@ -34,34 +33,36 @@ app = Flask(__name__)
 # vose = VoseAlias(histogram)
 returned_sentence = None
 
-# def generation(file):
-#     histogram = {}
-#     # genration function for master historgram
-#     if os.stat(file).st_size == 0:
-#         raise IOError(
-#             "Please provide a file containing a corpus (not an empty file).")
-#     # Ensure the file is text based (not binary). This is based on the implementation
-#     #  of the Linux file command
-#     textchars = bytearray([7, 8, 9, 10, 12, 13, 27]) + \
-#         bytearray(range(0x20, 0x100))
-#     with open(file, "rb") as bin_file:
-#         if bool(bin_file.read(2048).translate(None, textchars)):
-#             raise IOError("Please provide a file containing text-based data.")
-#     with open(file, "r") as corpus:
-#         words = corpus.read().lower()
-#         words_list = re.sub(r'[^a-zA-Z\s]', '', words).split()
 
-#     for o in words_list:  # o for outcome
-#         histogram[o] = histogram.get(o, 0) + 1
-#     return histogram
+def generation(file):
+    histogram = {}
+    # genration function for master historgram
+    if os.stat(file).st_size == 0:
+        raise IOError(
+            "Please provide a file containing a corpus (not an empty file).")
+    # Ensure the file is text based (not binary). This is based on the implementation
+    #  of the Linux file command
+    textchars = bytearray([7, 8, 9, 10, 12, 13, 27]) + \
+        bytearray(range(0x20, 0x100))
+    with open(file, "rb") as bin_file:
+        if bool(bin_file.read(2048).translate(None, textchars)):
+            raise IOError("Please provide a file containing text-based data.")
+    with open(file, "r") as corpus:
+        words = corpus.read().lower()
+        words_list = re.sub(r'[^a-zA-Z\s]', '', words).split()
+
+    for o in words_list:  # o for outcome
+        histogram[o] = histogram.get(o, 0) + 1
+    return histogram
 
 
-# def transform_format(val):
-#     # helper function for transforming image colors
-#     if val == 0:
-#         return 255
-#     else:
-#         return val
+def transform_format(val):
+    # helper function for transforming image colors
+    if val == 0:
+        return 255
+    else:
+        return val
+
 
 def file_upload(file):
     pass
@@ -81,6 +82,19 @@ def send_tweet(sentence):
     api = tweepy.API(auth)
     # TWEET TWEET!
     api.update_status(status=sentence)
+
+
+def file_check(file):
+    if os.stat(file).st_size == 0:
+        raise IOError(
+            "Please provide a file containing a corpus (not an empty file).")
+    # Ensure the file is text based (not binary). This is based on the implementation
+    #  of the Linux file command
+    textchars = bytearray([7, 8, 9, 10, 12, 13, 27]) + \
+        bytearray(range(0x20, 0x100))
+    with open(file, "rb") as bin_file:
+        if bool(bin_file.read(2048).translate(None, textchars)):
+            raise IOError("Please provide a file containing text-based data.")
 
 
 @app.route('/', methods=['GET'])
@@ -173,16 +187,6 @@ def generate():
                     server encounted exception
     """
     # todo: validate file
-#     if os.stat(file).st_size == 0:
-#         raise IOError(
-#             "Please provide a file containing a corpus (not an empty file).")
-#     # Ensure the file is text based (not binary). This is based on the implementation
-#     #  of the Linux file command
-#     textchars = bytearray([7, 8, 9, 10, 12, 13, 27]) + \
-#         bytearray(range(0x20, 0x100))
-#     with open(file, "rb") as bin_file:
-#         if bool(bin_file.read(2048).translate(None, textchars)):
-#             raise IOError("Please provide a file containing text-based data.")
     # todo if the user uploaded a file and the file isnt corrupted and is of type bytes then we can use it as a corpus
     # todo generate sentences from their file
     # if file_uploaded():
