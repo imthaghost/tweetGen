@@ -18,7 +18,7 @@
 
 > tweetGen generates tweets from any given corpus. The sentences are calculated via a stochastic model describing a sequence of possible events in which the probability of each event depends only on the state attained in the previous event (Markov Chain).
 
-> The live version can be found at http://24.6.36.157:8008
+> The live version can be found at http://24.6.36.157:8080
 
 ![Word Generation](/static/img/gen.gif)
 

@@ -194,4 +194,4 @@ def quote():
 
 if __name__ == "__main__":
     os.environ['FLASK_ENV'] = 'development'  # set enviornment variable
-    app.run(debug=True, port=8000)  # start the flask application
+    app.run(host='0.0.0.0', port=8000)  # start the flask application
