@@ -16,7 +16,7 @@ import tweepy
 #from wordcloud import WordCloud, STOPWORDS, ImageColorGenerator
 import markovify
 from flask import Flask, render_template, redirect, url_for, request, jsonify
-from flask.ext.uploads import UploadSet, configure_uploads, TEXT
+from flask_uploads import UploadSet, configure_uploads, TEXT
 # Local Python Modules
 from src.chain import gen_sentence
 from src.vose import *
@@ -25,6 +25,9 @@ from src.dictogram import *
 
 # name of application
 app = Flask(__name__)
+# user_corpus = UploadSet('body', TEXT)
+# app.config['UPLOADED_FILE_DEST'] = 'corpus/user'
+# configure_uploads(app, user_corpus)
 # generate corpus I will convert this to webcrawler later
 #histogram = Dictogram(path='./corpus/thus.txt')
 # construct alias tables
@@ -169,7 +172,37 @@ def generate():
                 description:
                     server encounted exception
     """
+    # todo: validate file
+#     if os.stat(file).st_size == 0:
+#         raise IOError(
+#             "Please provide a file containing a corpus (not an empty file).")
+#     # Ensure the file is text based (not binary). This is based on the implementation
+#     #  of the Linux file command
+#     textchars = bytearray([7, 8, 9, 10, 12, 13, 27]) + \
+#         bytearray(range(0x20, 0x100))
+#     with open(file, "rb") as bin_file:
+#         if bool(bin_file.read(2048).translate(None, textchars)):
+#             raise IOError("Please provide a file containing text-based data.")
+    # todo if the user uploaded a file and the file isnt corrupted and is of type bytes then we can use it as a corpus
+    # todo generate sentences from their file
+    # if file_uploaded():
+    # check to see how many sentence we wanted to generate
+    #     if num == None or num == 0:
+    #     # default courpus is plato
+    #     text = gen_sentence(num=2, corpus='./corpus/plato_republic.txt')
+    #     body = ' '
+    #     body = body.join(text)
 
+    #     return jsonify({'sentence': body})
+    # else:
+    #      # default courpus is plato
+    #     text = gen_sentence(num=int(num), corpus='./corpus/plato_republic.txt')
+    #     body = ' '
+    #     body = body.join(text)
+
+    #     return jsonify({'sentence': body}
+    # else:
+    # todo otherwise use default corpus
     num = request.form.get('count')
     if num == None or num == 0:
         # default courpus is plato
@@ -191,6 +224,12 @@ def generate():
 def quote():
     # comming soon
     pass
+
+
+@app.route('/upload', methods=['POST'])
+def upload():
+    pass
+    # if request.method = 'POST' and
 
 
 if __name__ == "__main__":
