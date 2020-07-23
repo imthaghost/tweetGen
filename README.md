@@ -1,24 +1,17 @@
-<h1 align="center">Welcome to tweetGen</h1>
-<a href="https://www.google.com/search?q=twitter+icon&source=lnms&tbm=isch&sa=X&ved=0ahUKEwingJCUgvPlAhWYsp4KHWpXBVYQ_AUIEigB&biw=1440&bih=788#imgrc=4-NyAF10t5J6BM:"><img src="/static/img/icon.png" title="Twitter Icon"></a>
-<p>
-    <a href="https://www.npmjs.com/package/readme-md-generator">
-    <img alt="downloads" src="https://img.shields.io/github/contributors/imthaghost/ghostChat?color=green" target="_blank" />
-
-  </a> 
-  
-  <img alt="Version" src="https://img.shields.io/badge/version-1.0-blue.svg?cacheSeconds=2592000" />
-  <a href="#" target="_blank">
-    <img alt="License: MIT" src="https://img.shields.io/badge/License-MIT-yellow.svg" />
-  </a>
-   <a href="https://github.com/imthaghost/gitmoji-changelog">
-    <img src="https://img.shields.io/badge/changelog-gitmoji-brightgreen.svg" alt="gitmoji-changelog">
-  </a>
-  
+<p align="center">
+  <a href="https://www.google.com/search?q=twitter+icon&source=lnms&tbm=isch&sa=X&ved=0ahUKEwingJCUgvPlAhWYsp4KHWpXBVYQ_AUIEigB&biw=1440&bih=788#imgrc=4-NyAF10t5J6BM:"><img src="/static/img/icon.png" title="Twitter Icon"></a>
 </p>
-
-> tweetGen generates tweets from any given corpus. The sentences are calculated via a stochastic model describing a sequence of possible events in which the probability of each event depends only on the state attained in the previous event (Markov Chain).
-
-> The live version can be found at http://24.6.36.157:5000
+<p align="center">
+tweetGen generates tweets from any given corpus. The sentences are calculated via a stochastic model describing a sequence of possible events in which the probability of each event depends only on the state attained in the previous event (Markov Chain).
+</p>
+<br>
+<p align="center">
+    <a href="https://www.npmjs.com/package/readme-md-generator"><img alt="downloads" src="https://img.shields.io/github/contributors/imthaghost/ghostChat?color=green" target="_blank" /></a>   
+  <a href="#" target="_blank"><img alt="License: MIT" src="https://img.shields.io/badge/License-MIT-yellow.svg" /></a>
+  <a href="https://github.com/imthaghost/gitmoji-changelog"><img src="https://img.shields.io/badge/changelog-gitmoji-brightgreen.svg" alt="gitmoji-changelog"></a>
+  <!-- <img alt="Version" src="https://img.shields.io/badge/version-1.0-blue.svg?cacheSeconds=2592000" /> -->
+</p>
+<br>
 
 ![Word Generation](/static/img/tweeter.gif)
 
@@ -67,21 +60,10 @@ pipenv install
 python3 app.py
 ```
 
-## How to contribute
-
-Fork the current repository and then make the changes that you'd like to said fork. Upon adding features, fixing bugs,
-or whatever modifications you've made to the project, issue a pull request to this repository containing the changes that you've made!
-
 ## Built With
 
 -   [Flask Micro-Framework](http://flask.palletsprojects.com/en/1.1.x/) - The web framework used
 -   [Wordcloud](https://pypi.org/project/wordcloud/) - Dependency
-
-## Contributors
-
--   **Gary Frederick** - _Author_ - [imthaghost](https://github.com/imthaghost)
-
-See also the list of [contributors](https://github.com/imthaghost/tweetGen/contributors) who participated in this project.
 
 ## Acknowledgments
 
