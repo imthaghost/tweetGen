@@ -60,6 +60,19 @@ pipenv install
 python3 app.py
 ```
 
+#### Virtual Env
+
+```bash
+# create and enter python virtualenv
+. virtualenv.sh
+# install modules into virtual environment
+pip install requirements.txt
+# patch flash_upload
+patch -Np0 < flask_uploads.py.diff
+# start flask server
+python3 app.py
+```
+
 ## Built With
 
 -   [Flask Micro-Framework](http://flask.palletsprojects.com/en/1.1.x/) - The web framework used
