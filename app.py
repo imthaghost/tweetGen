@@ -71,10 +71,10 @@ def file_upload(file):
 def send_tweet(sentence):
     """Just a tweet function"""
     # funciton that just updates twitter status 'tweet'
-    consumer_key = os.getenv('key')        # consumer key
-    consumer_secret = os.getenv('secret')       # consumer secret
-    access_token = os.getenv('access_token')            # access token
-    token_secret = os.getenv('token_secret')          # token secret
+    consumer_key = os.getenv('consumer_key')         # consumer key
+    consumer_secret = os.getenv('consumer_secret')   # consumer secret
+    access_token = os.getenv('access_token')         # access token
+    token_secret = os.getenv('token_secret')         # token secret
     # Oauth Handler
     auth = tweepy.OAuthHandler(consumer_key, consumer_secret)
     auth.set_access_token(access_token, token_secret)

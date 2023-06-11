@@ -1,0 +1,12 @@
+--- venv/lib/python3.11/site-packages/flask_uploads.py	2023-06-11 02:34:16.000000000 +0200
++++ venv/lib/python3.11/site-packages/flask_uploads.py	2023-06-11 02:27:27.000000000 +0200
+@@ -23,7 +23,8 @@
+
+ from flask import current_app, send_from_directory, abort, url_for
+ from itertools import chain
+-from werkzeug import secure_filename, FileStorage
++from werkzeug.datastructures import FileStorage
++from werkzeug.utils import secure_filename
+
+ from flask import Blueprint
+
